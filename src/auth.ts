@@ -21,17 +21,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   ],
   callbacks: {
-    async jwt({ token, account }) {
+    jwt: async ({ token, account }) => {
       if (account?.access_token) token.accessToken = account.access_token;
       if (account?.refresh_token) token.refreshToken = account.refresh_token;
       if (account?.expires_at) token.accessTokenExpiresAt = account.expires_at;
 
-      // nếu muốn dùng idToken ở session thì phải set:
       if (account?.id_token) token.idToken = account.id_token;
 
       return token;
     },
-    async session({ session, token }) {
+
+    session: async ({ session, token }) => {
       session.accessToken = token.accessToken as string;
       session.idToken = token.idToken as string;
       if (session.user) session.user.name = token.name as string;

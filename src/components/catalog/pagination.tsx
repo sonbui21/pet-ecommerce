@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { PaginationPrevSVG } from "../icon/pagination-prev";
 import { PaginationNextSVG } from "../icon/pagination-next";
