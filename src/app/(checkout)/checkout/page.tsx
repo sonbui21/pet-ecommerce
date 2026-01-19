@@ -1,0 +1,51 @@
+import { Addresses } from "@/components/order/addresses";
+import { CheckoutSummary } from "@/components/order/checkout-summary";
+import { Payment } from "@/components/order/payment";
+import { Review } from "@/components/order/review";
+import { Shipping } from "@/components/order/shipping";
+import { getCart } from "@/lib/data/basket";
+import { retrieveCustomer } from "@/lib/data/customer";
+import { Metadata } from "next";
+import { notFound, redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Checkout",
+};
+
+export default async function CheckoutPage(props: { searchParams: Promise<{ step?: string }> }) {
+  const cart = await getCart();
+
+  const searchParams = await props.searchParams;
+
+  if (!cart || !cart.items || cart.items.length === 0) {
+    return notFound();
+  }
+
+  const customer = await retrieveCustomer();
+
+  const step = searchParams.step;
+  const currentStep = cart.currentStep;
+
+  if (!step && !currentStep) {
+    redirect("/checkout?step=address");
+  } else if (currentStep && step !== currentStep) {
+    redirect(`/checkout?step=${currentStep}`);
+  }
+
+  return (
+    <div className='container'>
+      <div className='row justify-between py-12'>
+        <div className='col-lg-7'>
+          <Addresses cart={cart} customer={customer} />
+          <Shipping cart={cart} />
+          <Payment cart={cart} />
+          <Review />
+        </div>
+
+        <div className='col-lg-4'>
+          <CheckoutSummary cart={cart} />
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -3935,3 +3935,133 @@
 .account_sidebar_nav li .active {
   color: var(--theme-primary);
 }
+
+.bill_checkbox {
+  border: 1px solid #c8c8c8 !important;
+  border-radius: 4px !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin: 0 10px 0 0 !important;
+  padding: 0 !important;
+}
+
+.bill_checkbox:checked {
+  background-color: var(--theme-primary);
+}
+
+.bill_checkbox:focus {
+  box-shadow: none !important;
+}
+
+.shipping_address label:has(.form-check-input:checked) {
+  color: var(--theme-primary) !important;
+}
+
+.form-check-input:checked[type="checkbox"] {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Floating Input Common Styles */
+.floating-input-wrapper {
+  position: relative;
+}
+
+/* .floating-input-wrapper input {
+  background: #ffffff;
+  width: 100%;
+  border: 1px solid #e4e4e4;
+  padding: 13px 15px;
+  color: #000000;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  border-radius: 5px;
+  height: 45px;
+  transition: all 0.2s ease;
+} */
+
+/* Floating label - hidden when input is empty */
+.floating-input-wrapper .floating-label {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  font-weight: 500;
+  color: #b6b6b6;
+  pointer-events: none;
+  z-index: 1;
+  line-height: 1;
+  transition: all 0.2s ease;
+  opacity: 0;
+  transform-origin: left center;
+}
+
+/* Show floating label when input has value or is focused */
+.floating-input-wrapper:has(input:focus) .floating-label,
+.floating-input-wrapper:has(input:not(:placeholder-shown)) .floating-label {
+  top: 6px;
+  transform: translateY(0) scale(0.857);
+  font-size: 12px;
+  color: #666666;
+  opacity: 1;
+}
+
+/* Adjust input padding when label is floating */
+.floating-input-wrapper:has(input:focus) input,
+.floating-input-wrapper:has(input:not(:placeholder-shown)) input {
+  padding-top: 20px;
+  padding-bottom: 8px;
+}
+
+/* Native placeholder - visible when input is empty */
+.floating-input-wrapper input::placeholder {
+  color: #b6b6b6;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+/* Hide native placeholder when input is focused or has value */
+.floating-input-wrapper:has(input:focus) input::placeholder,
+.floating-input-wrapper:has(input:not(:placeholder-shown)) input::placeholder {
+  opacity: 0;
+}
+
+/* Red asterisk for required fields */
+.floating-input-wrapper .required-asterisk {
+  color: #dc3545;
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+/* Red asterisk in placeholder for required fields */
+.floating-input-wrapper.required-field .placeholder-asterisk {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #dc3545;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Show red asterisk in placeholder when input is empty and placeholder is visible */
+.floating-input-wrapper.required-field:has(input:placeholder-shown:not(:focus)) .placeholder-asterisk {
+  opacity: 1;
+}
+
+/* .required-field .floating-label::after {
+  content: " *";
+  color: red;
+} */
