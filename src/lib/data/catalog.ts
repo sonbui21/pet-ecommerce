@@ -3,7 +3,7 @@
 // import { cacheLife, cacheTag } from "next/cache";
 import { TAGS } from "../constants";
 import { Category, ProductCard, ProductDetail } from "../types/catalog";
-import { ListResponse, Response } from "../types/api";
+import { ListResponse, PaginatedResponse, Response } from "../types/api";
 import { apiClient } from "../api/api-client";
 import { API_ENDPOINTS } from "../api/endpoints";
 
@@ -65,6 +65,77 @@ export async function getProduct(handle: string): Promise<ProductDetail | null> 
 
   if (!response.body?.data) {
     return null;
+  }
+
+  return response.body.data;
+}
+
+export async function getProductsByCategory(
+  handle: string,
+  pageNumber = 1,
+  pageSize = 12,
+): Promise<PaginatedResponse<ProductCard>> {
+  const response = await apiClient<PaginatedResponse<ProductCard>>({
+    endpoint: API_ENDPOINTS.CATALOG.ITEMS_BY_CATEGORY(handle),
+    query: {
+      pageSize,
+      pageNumber,
+    },
+  });
+
+  if (!response.success) {
+    console.error("Failed to fetch products:", response.error);
+    return { data: [] };
+  }
+
+  if (!response.body?.data) {
+    return { data: [] };
+  }
+
+  return response.body;
+}
+
+export async function getProductsByTitle(
+  handle: string,
+  pageNumber = 1,
+  pageSize = 12,
+): Promise<PaginatedResponse<ProductCard>> {
+  const response = await apiClient<PaginatedResponse<ProductCard>>({
+    endpoint: API_ENDPOINTS.CATALOG.ITEMS_BY_TITLE(handle),
+    query: {
+      pageSize,
+      pageNumber,
+    },
+  });
+
+  if (!response.success) {
+    console.error("Failed to fetch products:", response.error);
+    return { data: [] };
+  }
+
+  if (!response.body?.data) {
+    return { data: [] };
+  }
+
+  return response.body;
+}
+
+export async function getCategories(): Promise<Category[]> {
+  // "use cache";
+  // cacheTag(TAGS.collections);
+  // cacheLife("days");
+
+  const response = await apiClient<ListResponse<Category>>({
+    endpoint: API_ENDPOINTS.CATALOG.SEARCH_CATEGORIES,
+  });
+
+  if (!response.success) {
+    console.error("Failed to fetch categories:", response.error);
+    return [];
+  }
+
+  if (!response.body?.data) {
+    return [];
   }
 
   return response.body.data;

@@ -1,9 +1,9 @@
 import { getMenu } from "@/lib/data/catalog";
 import Link from "next/link";
 import Image from "next/image";
-import { Search } from "./search";
+import { Search } from "../../common/search";
 import { Account } from "./account";
-import { CartModal } from "@/components/cart/cart-modal";
+import { CartModal } from "@/components/basket/cart-modal";
 
 export async function Navbar() {
   const menu = await getMenu();

@@ -1,5 +1,5 @@
 import { TitleShapeSVG } from "@/components/icon/title-shape";
-import { ProductCard } from "@/components/product/product-card";
+import { ProductCard } from "@/components/catalog/product-card";
 import { getPremiumProducts } from "@/lib/data/catalog";
 import Link from "next/link";
 

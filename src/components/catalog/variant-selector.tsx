@@ -2,9 +2,9 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { ProductDetail, ProductOption, ProductVariant, SelectedOptions } from "@/lib/types/catalog";
-import { Price } from "./price";
+import { Price } from "../common/price";
 import { QuantitySelector } from "./quantity-selector";
-import { AddToCart } from "../cart/add-to-cart";
+import { AddToCart } from "../basket/add-to-cart";
 
 type VariantSelectorProps = {
   options: ProductOption[];
@@ -53,10 +53,10 @@ export function VariantSelector({
   const findVariantForSelection = useCallback(
     (selection: Record<string, string>) => {
       return variantOptionMaps.find(({ optionMap }) =>
-        Object.entries(selection).every(([name, value]) => optionMap[name] === value)
+        Object.entries(selection).every(([name, value]) => optionMap[name] === value),
       )?.variant;
     },
-    [variantOptionMaps]
+    [variantOptionMaps],
   );
 
   const handleOptionClick = useCallback(
@@ -95,7 +95,7 @@ export function VariantSelector({
         };
       });
     },
-    [findVariantForSelection, options.length]
+    [findVariantForSelection, options.length],
   );
 
   const isOptionValueAvailable = useCallback(
@@ -111,7 +111,7 @@ export function VariantSelector({
         return Object.entries(nextSelection).every(([name, value]) => optionMap[name] === value);
       });
     },
-    [selectedMap, variantOptionMaps]
+    [selectedMap, variantOptionMaps],
   );
 
   const handleDecrease = useCallback(() => {

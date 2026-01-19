@@ -1,5 +1,5 @@
-import { Gallery } from "@/components/product/gallery";
-import { VariantSelector } from "@/components/product/variant-selector";
+import { Gallery } from "@/components/catalog/gallery";
+import { VariantSelector } from "@/components/catalog/variant-selector";
 import { getProduct } from "@/lib/data/catalog";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -68,11 +68,11 @@ export default async function ProductPage(props: { params: Promise<{ handle: str
 
 const DynamicRelatedProducts = dynamic(
   () =>
-    import("@/components/product/related-products").then((mod) => ({
+    import("@/components/catalog/related-products").then((mod) => ({
       default: mod.RelatedProducts,
     })),
   {
     loading: () => <></>,
     ssr: true,
-  }
+  },
 );

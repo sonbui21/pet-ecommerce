@@ -9,6 +9,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const parsePageNumber = (value?: string) => {
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed)) {
+    return 1;
+  }
+
+  return Math.max(1, Math.floor(parsed));
+};
+
 export function formatCurrency(amount: number | string, currencyCode: string = "USD", locale?: string): string | null {
   const num = typeof amount === "string" ? parseFloat(amount) : amount;
 
@@ -34,7 +44,7 @@ export function formatCurrency(amount: number | string, currencyCode: string = "
 export function formatPriceWithDiscount(
   amount: number | string,
   oldAmount?: number | string,
-  currencyCode: string = "USD"
+  currencyCode: string = "USD",
 ): {
   formattedPrice: string;
   formattedOldPrice: string | null;
