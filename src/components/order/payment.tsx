@@ -2,25 +2,44 @@
 
 import { Cart } from "@/lib/types/basket";
 import clsx from "clsx";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { CircleCheckSVG } from "../icon/circle-check";
 import { CreditCardSVG } from "../icon/credit-card";
 import { Divider } from "../common/divider";
 import { updateCart } from "@/lib/data/basket";
+import { FormEvent } from "react";
 
-export const Payment = ({ cart }: { cart: Cart }) => {
-  const searchParams = useSearchParams();
+export const Payment = ({ cart, isOpen }: { cart: Cart; isOpen: boolean }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const isOpen = searchParams.get("step") === "payment";
-
-  const handleEdit = () => {
-    updateCart({ ...cart, currentStep: "payment" });
+  const handleEdit = async () => {
+    await updateCart({ ...cart, currentStep: "payment" });
     router.push(pathname + "?step=payment", { scroll: false });
   };
 
-  const paymentReady = cart.shippingMethods !== undefined;
+  const paymentReady = cart.paymentCollection !== undefined && cart.paymentCollection != "";
+  console.log("paymentCollection", cart.paymentCollection, paymentReady);
+
+  const handleContinue = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const updatedCart: Cart = {
+      ...cart,
+      paymentCollection: "manual_payment",
+      currentStep: "review",
+    };
+
+    try {
+      const savedCart = await updateCart(updatedCart);
+
+      if (savedCart) {
+        router.push(pathname + "?step=review", { scroll: false });
+      }
+    } catch (error) {
+      console.error("Failed to update cart:", error);
+    }
+  };
 
   return (
     <div>
@@ -36,11 +55,15 @@ export const Payment = ({ cart }: { cart: Cart }) => {
           {!isOpen && paymentReady && <CircleCheckSVG className='w-[20px] pb-2 text-(--theme-primary)' />}
         </div>
 
-        {!isOpen && paymentReady && <button onClick={handleEdit}>Edit</button>}
+        {!isOpen && paymentReady && (
+          <button onClick={handleEdit} className='font-semibold'>
+            Edit
+          </button>
+        )}
       </div>
 
       {isOpen ? (
-        <>
+        <form onSubmit={handleContinue}>
           <div className='grid'>
             <button className='flex items-center justify-between cursor-pointer py-3 px-8 border rounded-lg! border-(--theme-primary)! mt-4'>
               <div className='flex items-center gap-x-4'>
@@ -55,7 +78,7 @@ export const Payment = ({ cart }: { cart: Cart }) => {
           <div className='flex mt-8'>
             <button className='btn'>Continue to review</button>
           </div>
-        </>
+        </form>
       ) : (
         <>
           {cart && paymentReady && (
@@ -75,7 +98,7 @@ export const Payment = ({ cart }: { cart: Cart }) => {
           )}
         </>
       )}
-      <Divider className='mt-8 mb-8' />
+      <Divider className='mt-6 mb-6' />
     </div>
   );
 };

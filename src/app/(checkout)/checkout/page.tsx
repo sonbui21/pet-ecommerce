@@ -26,20 +26,20 @@ export default async function CheckoutPage(props: { searchParams: Promise<{ step
   const step = searchParams.step;
   const currentStep = cart.currentStep;
 
-  if (!step && !currentStep) {
-    redirect("/checkout?step=address");
-  } else if (currentStep && step !== currentStep) {
+  if (currentStep && step !== currentStep) {
     redirect(`/checkout?step=${currentStep}`);
+  } else if (!step && !currentStep) {
+    redirect("/checkout?step=address");
   }
 
   return (
     <div className='container'>
-      <div className='row justify-between py-12'>
+      <div className='row justify-between py-8'>
         <div className='col-lg-7'>
-          <Addresses cart={cart} customer={customer} />
-          <Shipping cart={cart} />
-          <Payment cart={cart} />
-          <Review />
+          <Addresses cart={cart} customer={customer} isOpen={step === "address"} />
+          <Shipping cart={cart} isOpen={step === "delivery"} />
+          <Payment cart={cart} isOpen={step === "payment"} />
+          <Review isOpen={step === "review"} />
         </div>
 
         <div className='col-lg-4'>

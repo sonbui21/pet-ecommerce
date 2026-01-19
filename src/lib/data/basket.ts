@@ -53,6 +53,8 @@ function mapCartToBasket(cart: Cart): UpdateBasketRequest {
     billing_address: mapAddressToProtoAddress(cart.billingAddress),
     shipping_methods: mapShippingMethodToProto(cart.shippingMethods),
 
+    payment_collection: cart.paymentCollection,
+
     current_step: cart.currentStep ?? "",
   };
 }
@@ -127,6 +129,8 @@ function mapBasketToCart(basket: CustomerBasketResponse): Cart {
     shippingAddress: mapProtoAddressToAddress(basket.shipping_address),
     billingAddress: mapProtoAddressToAddress(basket.billing_address),
     shippingMethods: mapProtoToShippingMethod(basket.shipping_methods),
+
+    paymentCollection: basket.payment_collection,
 
     currentStep: basket.current_step,
   };

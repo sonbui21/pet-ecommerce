@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ShippingAddress } from "./shipping-address";
 import { BillingAddress } from "./billing-address";
 import { FormEvent } from "react";
@@ -12,12 +12,17 @@ import compareAddresses from "@/lib/utils";
 import { CircleCheckSVG } from "../icon/circle-check";
 import { Divider } from "../common/divider";
 
-export const Addresses = ({ cart, customer }: { cart: Cart; customer: StoreCustomer | null }) => {
-  const searchParams = useSearchParams();
+export const Addresses = ({
+  cart,
+  customer,
+  isOpen,
+}: {
+  cart: Cart;
+  customer: StoreCustomer | null;
+  isOpen: boolean;
+}) => {
   const router = useRouter();
   const pathname = usePathname();
-
-  const isOpen = searchParams.get("step") === "address";
 
   const { state: sameAsBilling, toggle: toggleSameAsBilling } = useToggleState(
     cart?.shippingAddress && cart?.billingAddress
@@ -25,8 +30,8 @@ export const Addresses = ({ cart, customer }: { cart: Cart; customer: StoreCusto
       : true,
   );
 
-  const handleEdit = () => {
-    updateCart({ ...cart, currentStep: "address" });
+  const handleEdit = async () => {
+    await updateCart({ ...cart, currentStep: "address" });
     router.push(pathname + "?step=address");
   };
 
@@ -99,7 +104,11 @@ export const Addresses = ({ cart, customer }: { cart: Cart; customer: StoreCusto
           {!isOpen && <CircleCheckSVG className='w-[20px] pb-2 text-(--theme-primary)' />}
         </div>
 
-        {!isOpen && cart?.shippingAddress && <button onClick={handleEdit}>Edit</button>}
+        {!isOpen && cart?.shippingAddress && (
+          <button onClick={handleEdit} className='font-semibold'>
+            Edit
+          </button>
+        )}
       </div>
 
       {isOpen ? (
@@ -169,7 +178,7 @@ export const Addresses = ({ cart, customer }: { cart: Cart; customer: StoreCusto
           )}
         </div>
       )}
-      <Divider className='mt-8 mb-8' />
+      <Divider className='mt-6 mb-6' />
     </div>
   );
 };

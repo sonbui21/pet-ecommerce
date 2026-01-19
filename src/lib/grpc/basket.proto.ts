@@ -58,6 +58,7 @@ export interface CustomerBasketResponse {
   shipping_address?: Address;
   billing_address?: Address;
   shipping_methods?: ShippingMethod;
+  payment_collection?: string;
   current_step: string;
 }
 
@@ -75,5 +76,6 @@ export interface UpdateBasketRequest {
   shipping_address?: Address;
   billing_address?: Address;
   shipping_methods?: ShippingMethod;
+  payment_collection?: string;
   current_step: string;
 }

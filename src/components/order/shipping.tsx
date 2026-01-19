@@ -1,22 +1,47 @@
 "use client";
 
-import { Cart } from "@/lib/types/basket";
+import { Cart, ShippingMethod } from "@/lib/types/basket";
 import clsx from "clsx";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { CircleCheckSVG } from "../icon/circle-check";
 import { Divider } from "../common/divider";
 import { updateCart } from "@/lib/data/basket";
+import { FormEvent } from "react";
 
-export const Shipping = ({ cart }: { cart: Cart }) => {
-  const searchParams = useSearchParams();
+export const Shipping = ({ cart, isOpen }: { cart: Cart; isOpen: boolean }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const isOpen = searchParams.get("step") === "delivery";
-
-  const handleEdit = () => {
-    updateCart({ ...cart, currentStep: "payment" });
+  const handleEdit = async () => {
+    await updateCart({ ...cart, currentStep: "delivery" });
     router.push(pathname + "?step=delivery", { scroll: false });
+  };
+
+  const handleContinue = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const shippingMethod: ShippingMethod = {
+      id: "standard_shipping",
+      name: "Standard shipping",
+      amount: 5.0,
+      description: "Standard shipping",
+    };
+
+    const updatedCart: Cart = {
+      ...cart,
+      shippingMethods: shippingMethod,
+      currentStep: "payment",
+    };
+
+    try {
+      const savedCart = await updateCart(updatedCart);
+
+      if (savedCart) {
+        router.push(pathname + "?step=payment", { scroll: false });
+      }
+    } catch (error) {
+      console.error("Failed to update cart:", error);
+    }
   };
 
   return (
@@ -33,13 +58,15 @@ export const Shipping = ({ cart }: { cart: Cart }) => {
           {!isOpen && cart.shippingMethods && <CircleCheckSVG className='w-[20px] pb-2 text-(--theme-primary)' />}
         </div>
 
-        {!isOpen && cart?.shippingAddress && cart?.billingAddress && cart?.email && (
-          <button onClick={handleEdit}>Edit</button>
+        {!isOpen && cart?.shippingMethods && (
+          <button onClick={handleEdit} className='font-semibold'>
+            Edit
+          </button>
         )}
       </div>
 
       {isOpen ? (
-        <>
+        <form onSubmit={handleContinue}>
           <div className='grid'>
             <div className='flex flex-col'>
               <span className='font-bold'>Shipping method</span>
@@ -57,7 +84,7 @@ export const Shipping = ({ cart }: { cart: Cart }) => {
           <div className='flex mt-8'>
             <button className='btn'>Continue to payment</button>
           </div>
-        </>
+        </form>
       ) : (
         <>
           {cart && cart.shippingMethods && (
@@ -70,7 +97,7 @@ export const Shipping = ({ cart }: { cart: Cart }) => {
           )}
         </>
       )}
-      <Divider className='mt-8 mb-8' />
+      <Divider className='mt-6 mb-6' />
     </div>
   );
 };

@@ -1,12 +1,7 @@
-"use client";
-
 import clsx from "clsx";
-import { useSearchParams } from "next/navigation";
 import { CircleCheckSVG } from "../icon/circle-check";
 
-export const Review = () => {
-  const searchParams = useSearchParams();
-  const isOpen = searchParams.get("step") === "review";
+export const Review = ({ isOpen }: { isOpen: boolean }) => {
   return (
     <div>
       <div className='flex gap-2'>

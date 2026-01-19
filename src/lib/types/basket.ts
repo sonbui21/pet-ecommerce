@@ -12,6 +12,7 @@ export type Cart = {
   shippingAddress?: Address;
   billingAddress?: Address;
   shippingMethods?: ShippingMethod;
+  paymentCollection?: string;
 
   currentStep?: string;
 };
