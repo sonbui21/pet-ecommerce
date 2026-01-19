@@ -2,51 +2,43 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { useCart } from "./cart-context";
-import { createCartAndSetCookie } from "./actions";
-import { QuantitySelector } from "./quantity-selector";
 import { Price } from "./price";
+import { useCartStore } from "./cart-store";
+import { QuantitySelector } from "./quantity-selector";
 
 export function CartModal() {
-  const { cart, updateCartItem } = useCart();
+  const open = useCartStore((state) => state.isOpen);
+  const openCart = useCartStore((state) => state.openCart);
+  const closeCart = useCartStore((state) => state.closeCart);
 
-  const [open, setOpen] = useState(false);
-
-  const quantityRef = useRef(cart?.totalQuantity);
-
-  const openCart = () => setOpen(true);
-  const closeCart = () => setOpen(false);
-
-  useEffect(() => {
-    if (!cart) {
-      createCartAndSetCookie();
-    }
-  }, [cart]);
+  const cart = useCartStore((state) => state.cart);
+  const fetchCart = useCartStore((state) => state.fetchCart);
+  const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
+  const removeItem = useCartStore((state) => state.removeItem);
 
   useEffect(() => {
-    if (cart?.totalQuantity && cart?.totalQuantity !== quantityRef.current && cart?.totalQuantity > 0) {
-      if (!open) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        openCart();
-      }
-      quantityRef.current = cart?.totalQuantity;
-    }
-  }, [open, cart?.totalQuantity, quantityRef]);
+    if (!cart) fetchCart();
+  }, [cart, fetchCart]);
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (isOpen) {
+          openCart();
+        } else {
+          closeCart();
+        }
+      }}
+    >
       <SheetTrigger className='!text-[var(--theme-secondary)] hover:!text-[var(--theme-primary)]'>
         <i className='flaticon-shopping-bag'></i>
-        <span className='custom-cart-span'>{cart?.totalQuantity ?? 0}</span>
+        {cart?.totalQuantity !== undefined && <span className='custom-cart-span'>{cart?.totalQuantity ?? 0}</span>}
       </SheetTrigger>
 
-      <SheetContent
-        side='right'
-        className='w-full sm:max-w-md gap-0 bg-[#fff]'
-        onOpenAutoFocus={(e) => e.preventDefault()}
-      >
+      <SheetContent side='right' className='w-full sm:max-w-md gap-0 bg-[#fff]'>
         <SheetHeader className='pb-0'>
           <SheetTitle>My Cart</SheetTitle>
           <SheetDescription className='sr-only'>My Cart</SheetDescription>
@@ -78,7 +70,7 @@ export function CartModal() {
 
                         <div className='flex flex-1 items-start justify-between gap-3'>
                           <div className='min-w-0'>
-                            <div className='truncate font-medium'>{item.title}</div>
+                            <div className='truncate font-medium'>{item.title.slice(0, 30)}</div>
                             {item.variantOptions && (
                               <div className='mt-1 flex flex-wrap gap-1'>
                                 {item.variantOptions.map((o) => (
@@ -94,11 +86,13 @@ export function CartModal() {
                           </div>
                         </div>
                       </Link>
-                      <span className='cursor-pointer hover:text-(--theme-primary)'>Delete</span>
+                      <span className='cursor-pointer hover:text-(--theme-primary)' onClick={() => removeItem(item.id)}>
+                        Delete
+                      </span>
                     </div>
 
                     <div className='flex justify-between'>
-                      {/* <QuantitySelector
+                      <QuantitySelector
                         isDecreaseDisabled={item.quantity <= 1}
                         isIncreaseDisabled={item.quantity >= item.availableStock}
                         quantity={item.quantity}
@@ -107,7 +101,7 @@ export function CartModal() {
                         className='w-[128px]!'
                         classNameInput='h-[36px]! text-sm!'
                         classNameSpan='w-[24px]! h-[24px]!'
-                      /> */}
+                      />
                       <Price amount={item.price} currencyCode={cart.currencyCode ?? "USD"} />
                     </div>
                   </li>

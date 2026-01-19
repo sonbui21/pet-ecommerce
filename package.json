@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node --use-system-ca ./node_modules/next/dist/bin/next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
@@ -20,7 +20,9 @@
     "next-auth": "^5.0.0-beta.30",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "yet-another-react-lightbox": "^3.28.0",
+    "zustand": "^5.0.10"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

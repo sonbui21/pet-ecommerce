@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Search } from "./search";
 import { Account } from "./account";
-import { CartModal } from "@/components/cart/modal";
+import { CartModal } from "@/components/cart/cart-modal";
 
 export async function Navbar() {
   const menu = await getMenu();

@@ -68,8 +68,6 @@ export async function apiClient<T>({
       body: data,
     };
   } catch (error: unknown) {
-    console.log(error);
-
     return {
       success: false,
       status: 0,
