@@ -21,7 +21,7 @@ export async function Navbar() {
           <div className='row'>
             <div className='col-12'>
               <div className='tgmenu__wrap'>
-                <nav className='tgmenu__nav'>
+                <nav className='tgmenu__nav justify-between!'>
                   <div className='logo'>
                     <Link href='/'>
                       <Image src='/logo/logo.png' alt='Logo' width={150} height={40} priority sizes='150px' />
@@ -43,7 +43,7 @@ export async function Navbar() {
                   </div>
 
                   <div className='tgmenu__navbar-wrap tgmenu__action tgmenu__action-three d-none d-md-block mr-0-important'>
-                    <ul className='list-wrap'>
+                    <ul className='list-wrap m-0!'>
                       <Account />
 
                       <li className='header-cart header-cart-two custom-cart cursor-pointer'>

@@ -14,6 +14,7 @@ export const Payment = ({ cart }: { cart: Cart }) => {
   const pathname = usePathname();
 
   const isOpen = searchParams.get("step") === "payment";
+
   const handleEdit = () => {
     updateCart({ ...cart, currentStep: "payment" });
     router.push(pathname + "?step=payment", { scroll: false });

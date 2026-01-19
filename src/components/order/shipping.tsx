@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CircleCheckSVG } from "../icon/circle-check";
 import { Divider } from "../common/divider";
+import { updateCart } from "@/lib/data/basket";
 
 export const Shipping = ({ cart }: { cart: Cart }) => {
   const searchParams = useSearchParams();
@@ -12,7 +13,9 @@ export const Shipping = ({ cart }: { cart: Cart }) => {
   const pathname = usePathname();
 
   const isOpen = searchParams.get("step") === "delivery";
+
   const handleEdit = () => {
+    updateCart({ ...cart, currentStep: "payment" });
     router.push(pathname + "?step=delivery", { scroll: false });
   };
 

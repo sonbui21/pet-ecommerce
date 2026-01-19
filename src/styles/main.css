@@ -347,7 +347,7 @@
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  flex-grow: 1;
+  /* flex-grow: 1; */
 }
 .tgmenu__navbar-wrap > ul {
   display: -webkit-box;

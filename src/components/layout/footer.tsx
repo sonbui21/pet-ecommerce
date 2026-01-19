@@ -10,7 +10,7 @@ export default async function Footer() {
   return (
     <footer className='max-w-screen'>
       <div className='footer__area'>
-        <div className='footer__top footer__top-three fix'>
+        {/* <div className='footer__top footer__top-three fix'>
           <div className='container'>
             <div className='row'>
               <div className='col-xl-3 col-lg-4 col-md-6'>
@@ -138,7 +138,7 @@ export default async function Footer() {
               height={150}
             />
           </div>
-        </div>
+        </div> */}
 
         <div className='footer__bottom footer__bottom-two'>
           <div className='container'>
@@ -148,7 +148,7 @@ export default async function Footer() {
                   <p>Copyright © 2025. All Rights Reserved.</p>
                 </div>
               </div>
-              <div className='col-lg-7'>
+              {/* <div className='col-lg-7'>
                 <div className='footer__bottom-menu footer__bottom-menu-two'>
                   <ul className='list-wrap'>
                     <li>
@@ -165,7 +165,7 @@ export default async function Footer() {
                     </li>
                   </ul>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

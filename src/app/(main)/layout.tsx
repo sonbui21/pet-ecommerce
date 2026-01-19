@@ -8,7 +8,7 @@ export default async function MainLayout({ children }: { children: React.ReactNo
       <ScrollToTop />
 
       <Navbar />
-      <main className='min-h-100'>{children}</main>
+      <main className='min-h-screen'>{children}</main>
 
       <Footer />
     </>

@@ -16,7 +16,7 @@ export async function Account() {
             </i>
           </span>
 
-          <ul className='absolute opacity-0 invisible group-hover/account:opacity-100! group-hover/account:visible! transition-all duration-200 border border-[#f5f5f5] bg-(--color-white-default) shadow-[0_30px_70px_0_hsla(216,2%,55%,0.15)] rounded-[6px] z-9 m-0 p-0 top-[80px] left-[-52px] flex-col w-36'>
+          <ul className='absolute opacity-0 invisible group-hover/account:opacity-100! group-hover/account:visible! transition-all duration-200 border border-[#f5f5f5] bg-(--color-white-default) shadow-[0_30px_70px_0_hsla(216,2%,55%,0.15)] rounded-[6px] z-9 m-0 p-0 top-[80px] flex-col w-36'>
             <li className='before:hidden w-full group/item ml-0!'>
               <Link
                 href='/account'
