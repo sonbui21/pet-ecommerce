@@ -1,3 +1,5 @@
+import "server-only";
+import { auth } from "@/auth";
 export type ApiResult<T> =
   | { success: true; status: number; body: T }
   | { success: false; status: number; error: string };
@@ -38,6 +40,11 @@ export async function apiClient<T>({
 
     if (body) {
       fetchOptions.body = JSON.stringify(body);
+    }
+
+    const session = await auth();
+    if (session) {
+      (fetchOptions.headers as Record<string, string>)["Authorization"] = `Bearer ${session.accessToken}`;
     }
 
     const response = await fetch(url.toString(), fetchOptions);

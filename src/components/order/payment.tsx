@@ -19,7 +19,6 @@ export const Payment = ({ cart, isOpen }: { cart: Cart; isOpen: boolean }) => {
   };
 
   const paymentReady = cart.paymentCollection !== undefined && cart.paymentCollection != "";
-  console.log("paymentCollection", cart.paymentCollection, paymentReady);
 
   const handleContinue = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

@@ -1,28 +1,78 @@
-import clsx from "clsx";
-import { CircleCheckSVG } from "../icon/circle-check";
+"use client";
 
-export const Review = ({ isOpen }: { isOpen: boolean }) => {
+import clsx from "clsx";
+import { useState, useTransition } from "react";
+import { CircleCheckSVG } from "../icon/circle-check";
+import { Cart } from "@/lib/types/basket";
+import { placeOrder } from "@/lib/actions/order";
+import { StoreCustomer } from "@/lib/types/customer";
+
+export const Review = ({ isOpen, cart, customer }: { cart: Cart; customer: StoreCustomer; isOpen: boolean }) => {
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+
+  const handlePlaceOrder = async () => {
+    setError(null);
+    setMessage(null);
+
+    startTransition(async () => {
+      try {
+        const result = await placeOrder(cart, customer.id, customer.email);
+
+        if (!result.success) {
+          setError(result.error || "Failed to place order");
+          return;
+        }
+
+        setMessage(
+          result.orderId
+            ? `Order placed successfully! Your order ID is ${result.orderId}`
+            : "Order placed successfully!",
+        );
+      } catch (err) {
+        console.error("Error adding item to cart:", err);
+        setError("Failed to add item to cart. Please try again.");
+      }
+    });
+  };
+
   return (
     <div>
       <div className='flex gap-2'>
         <h2
           className={clsx("mb-0", {
-            "opacity-50 pointer-events-none select-none": !isOpen && true,
+            "opacity-50 pointer-events-none select-none": !isOpen,
           })}
         >
           Review
         </h2>
-        {!isOpen && false && <CircleCheckSVG className='w-[20px] pb-2 text-(--theme-primary)' />}
+        {!isOpen && <CircleCheckSVG className='w-[20px] pb-2 text-(--theme-primary)' />}
       </div>
 
-      {isOpen && true && (
+      {isOpen && (
         <>
           <div>
             By clicking the Place Order button, you confirm that you have read, understand and accept our Terms of Use,
             Terms of Sale and Returns Policy and acknowledge that you have read PetPal Store&apos;s Privacy Policy.
           </div>
+          {error && (
+            <div className='mt-4 rounded-md bg-red-50 p-4'>
+              <p className='text-sm text-red-800 mb-0'>{error}</p>
+            </div>
+          )}
+          {message && (
+            <div className='mt-4 rounded-md bg-green-50 p-4'>
+              <p className='text-sm text-green-800 mb-0'>{message}</p>
+            </div>
+          )}
           <div className='flex mt-8'>
-            <button className='btn'>Place order</button>
+            <button
+              onClick={handlePlaceOrder}
+              className={`btn ${isPending ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
+            >
+              {isPending ? "Placing order..." : "Place order"}
+            </button>
           </div>
         </>
       )}

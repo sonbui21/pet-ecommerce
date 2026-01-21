@@ -12,15 +12,7 @@ import compareAddresses from "@/lib/utils";
 import { CircleCheckSVG } from "../icon/circle-check";
 import { Divider } from "../common/divider";
 
-export const Addresses = ({
-  cart,
-  customer,
-  isOpen,
-}: {
-  cart: Cart;
-  customer: StoreCustomer | null;
-  isOpen: boolean;
-}) => {
+export const Addresses = ({ cart, customer, isOpen }: { cart: Cart; customer: StoreCustomer; isOpen: boolean }) => {
   const router = useRouter();
   const pathname = usePathname();
 

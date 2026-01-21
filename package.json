@@ -12,6 +12,8 @@
     "@grpc/grpc-js": "^1.14.3",
     "@grpc/proto-loader": "^0.8.0",
     "@radix-ui/react-dialog": "^1.1.15",
+    "@stripe/react-stripe-js": "^5.4.1",
+    "@stripe/stripe-js": "^8.6.3",
     "bootstrap": "^5.3.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -21,6 +23,7 @@
     "next-auth": "^5.0.0-beta.30",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "stripe": "^20.2.0",
     "tailwind-merge": "^3.4.0",
     "yet-another-react-lightbox": "^3.28.0",
     "zustand": "^5.0.10"

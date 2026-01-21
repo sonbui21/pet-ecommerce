@@ -22,6 +22,9 @@ export default async function CheckoutPage(props: { searchParams: Promise<{ step
   }
 
   const customer = await retrieveCustomer();
+  if (!customer) {
+    return notFound();
+  }
 
   const step = searchParams.step;
   const currentStep = cart.currentStep;
@@ -39,7 +42,7 @@ export default async function CheckoutPage(props: { searchParams: Promise<{ step
           <Addresses cart={cart} customer={customer} isOpen={step === "address"} />
           <Shipping cart={cart} isOpen={step === "delivery"} />
           <Payment cart={cart} isOpen={step === "payment"} />
-          <Review isOpen={step === "review"} />
+          <Review cart={cart} customer={customer} isOpen={step === "review"} />
         </div>
 
         <div className='col-lg-4'>

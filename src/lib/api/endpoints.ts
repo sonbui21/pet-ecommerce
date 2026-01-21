@@ -10,4 +10,7 @@ export const API_ENDPOINTS = {
       `${BASE_CATALOG_ENDPOINT}/catalog/items/category/${encodeURIComponent(handle)}`,
     ITEMS_BY_TITLE: (handle: string) => `${BASE_CATALOG_ENDPOINT}/catalog/items/title/${encodeURIComponent(handle)}`,
   },
+  ORDER: {
+    PLACE_ORDER: `${process.env.ORDER_API_BASE_URL}/api/orders`,
+  },
 } as const;

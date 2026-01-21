@@ -22,3 +22,24 @@ export const removeCartId = async () => {
   const cookieStore = await cookies();
   cookieStore.delete("_pet_cart_id");
 };
+
+export const getRequestOrderId = async () => {
+  const cookieStore = await cookies();
+  return cookieStore.get("_pet_request_order_id")?.value;
+};
+
+export const setRequestOrderId = async (requestOrderId: string) => {
+  const cookieStore = await cookies();
+  cookieStore.set("_pet_request_order_id", requestOrderId, {
+    maxAge: 60 * 60 * 24 * 7,
+    httpOnly: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+  });
+};
+
+export const removeRequestOrderId = async () => {
+  const cookieStore = await cookies();
+  cookieStore.delete("_pet_request_order_id");
+};
