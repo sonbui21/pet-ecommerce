@@ -1,8 +1,8 @@
 "use server";
 
-import { apiClient } from "../api/api-client";
+import { apiClient } from "../api-client";
 import { CreateOrderRequest, CreateOrderResponse } from "@/lib/types/order";
-import { API_ENDPOINTS } from "../api/endpoints";
+import { API_ENDPOINTS } from "../endpoints";
 import { StoreOrder } from "../types/customer";
 import { ListResponse } from "../types/api";
 

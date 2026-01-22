@@ -6,8 +6,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { CircleCheckSVG } from "../icon/circle-check";
 import { CreditCardSVG } from "../icon/credit-card";
 import { Divider } from "../common/divider";
-import { updateCart } from "@/lib/data/basket";
 import { FormEvent } from "react";
+import { updateCart } from "@/lib/actions/cart";
 
 export const Payment = ({ cart, isOpen }: { cart: Cart; isOpen: boolean }) => {
   const router = useRouter();

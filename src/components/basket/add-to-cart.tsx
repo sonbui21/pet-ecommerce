@@ -2,7 +2,7 @@
 
 import { ProductDetail, SelectedOptions } from "@/lib/types/catalog";
 import { useState, useTransition } from "react";
-import { useCartStore } from "./cart-store";
+import { useCartStore } from "../../lib/stores/cart-store";
 
 export function AddToCart({
   isDisabled,

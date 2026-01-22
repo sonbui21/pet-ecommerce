@@ -4,8 +4,8 @@
 import { TAGS } from "../constants";
 import { Category, ProductCard, ProductDetail } from "../types/catalog";
 import { ListResponse, PaginatedResponse, Response } from "../types/api";
-import { apiClient } from "../api/api-client";
-import { API_ENDPOINTS } from "../api/endpoints";
+import { apiClient } from "../api-client";
+import { API_ENDPOINTS } from "../endpoints";
 
 export async function getMenu(): Promise<Category[]> {
   // "use cache";

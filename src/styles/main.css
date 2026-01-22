@@ -4000,7 +4000,6 @@
   z-index: 1;
   line-height: 1;
   transition: all 0.2s ease;
-  opacity: 0;
   transform-origin: left center;
 }
 

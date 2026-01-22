@@ -8,25 +8,13 @@ export interface VariantOption {
 }
 
 export interface Address {
-  id: string;
-  customer_id: string;
-  first_name: string;
-  last_name: string;
-  phone: string;
-  company: string;
-  address_1: string;
-  address_2: string;
-  city: string;
-  country_code: string;
-  province: string;
-  postal_code: string;
-}
-
-export interface ShippingMethod {
-  id: string;
   name: string;
-  description: string;
-  amount: string;
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  zip_code: string;
+  phone: string;
 }
 
 export interface BasketItem {
@@ -48,16 +36,13 @@ export interface CustomerBasketResponse {
   cart_id: string;
   items: BasketItem[];
 
-  currency_code: string;
   total: string;
   sub_total: string;
   tax_total: string;
   total_quantity: string;
 
-  email: string;
   shipping_address?: Address;
   billing_address?: Address;
-  shipping_methods?: ShippingMethod;
   payment_collection?: string;
   current_step: string;
 }
@@ -66,16 +51,13 @@ export interface UpdateBasketRequest {
   cart_id: string;
   items: BasketItem[];
 
-  currency_code: string;
   total: string;
   sub_total: string;
   tax_total: string;
   total_quantity: string;
 
-  email: string;
   shipping_address?: Address;
   billing_address?: Address;
-  shipping_methods?: ShippingMethod;
   payment_collection?: string;
   current_step: string;
 }

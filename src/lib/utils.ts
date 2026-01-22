@@ -1,7 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import isEqual from "lodash/isEqual";
-import pick from "lodash/pick";
 
 export const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
@@ -20,33 +18,6 @@ export const parsePageNumber = (value?: string) => {
 
   return Math.max(1, Math.floor(parsed));
 };
-
-export default function compareAddresses(address1: unknown, address2: unknown) {
-  return isEqual(
-    pick(address1, [
-      "first_name",
-      "last_name",
-      "address_1",
-      "company",
-      "postal_code",
-      "city",
-      "country_code",
-      "province",
-      "phone",
-    ]),
-    pick(address2, [
-      "first_name",
-      "last_name",
-      "address_1",
-      "company",
-      "postal_code",
-      "city",
-      "country_code",
-      "province",
-      "phone",
-    ]),
-  );
-}
 
 export function formatDateTime(iso: string) {
   return new Date(iso).toLocaleString("en-US", {

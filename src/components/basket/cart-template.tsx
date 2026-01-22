@@ -2,7 +2,7 @@
 
 import { StoreCustomer } from "@/lib/types/customer";
 import Link from "next/link";
-import { useCartStore } from "./cart-store";
+import { useCartStore } from "../../lib/stores/cart-store";
 import { Items } from "./items";
 import { Summary } from "./summary";
 import { loginAction } from "@/lib/actions/auth";

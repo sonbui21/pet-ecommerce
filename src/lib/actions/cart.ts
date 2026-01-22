@@ -1,15 +1,10 @@
 "use server";
 
 import { getBasket, updateBasket } from "../grpc/basket-client";
-import { getCartId } from "./cookies";
-import { Address, Cart, CartItem, ShippingMethod } from "@/lib/types/basket";
-import {
-  BasketItem,
-  CustomerBasketResponse,
-  Address as ProtoAddress,
-  ShippingMethod as ProtoShippingMethod,
-  UpdateBasketRequest,
-} from "../grpc/basket.proto";
+import { BasketItem, UpdateBasketRequest } from "../grpc/basket.proto";
+import { Address, Cart, CartItem } from "../types/basket";
+import { CustomerBasketResponse, Address as ProtoAddress } from "../grpc/basket.proto";
+import { getCartId } from "../data/cookies";
 
 export async function updateCart(cart: Cart): Promise<Cart | null> {
   const updatedBasket = await updateBasket(mapCartToBasket(cart));
@@ -26,7 +21,6 @@ export async function getCart(): Promise<Cart | undefined> {
   }
 
   const cart = await getBasket({ cart_id: cartId });
-
   return mapBasketToCart(cart);
 }
 
@@ -42,17 +36,12 @@ function mapCartToBasket(cart: Cart): UpdateBasketRequest {
     cart_id: cart.id,
     items: cart.items ? cart.items?.map(mapCartItemToBasketItem) : [],
 
-    currency_code: cart.currencyCode,
     total: total.toString(),
     sub_total: subTotal.toString(),
     tax_total: taxTotal.toString(),
     total_quantity: totalQuantity.toString(),
 
-    email: cart.email ?? "",
     shipping_address: mapAddressToProtoAddress(cart.shippingAddress),
-    billing_address: mapAddressToProtoAddress(cart.billingAddress),
-    shipping_methods: mapShippingMethodToProto(cart.shippingMethods),
-
     payment_collection: cart.paymentCollection,
 
     current_step: cart.currentStep ?? "",
@@ -81,36 +70,18 @@ function mapCartItemToBasketItem(item: CartItem): BasketItem {
 }
 
 function mapAddressToProtoAddress(address?: Address): ProtoAddress | undefined {
-  if (!address || !address.id) {
+  if (!address) {
     return undefined;
   }
 
   return {
-    id: address.id,
-    customer_id: address.customerId,
-    first_name: address.firstName,
-    last_name: address.lastName,
+    name: address.name,
     phone: address.phone,
-    company: address.company,
-    address_1: address.address1,
-    address_2: address.address2,
+    street: address.street,
     city: address.city,
-    country_code: address.countryCode,
-    province: address.province,
-    postal_code: address.postalCode,
-  };
-}
-
-function mapShippingMethodToProto(ship?: ShippingMethod): ProtoShippingMethod | undefined {
-  if (!ship || !ship.id) {
-    return undefined;
-  }
-
-  return {
-    id: ship.id,
-    name: ship.name,
-    description: ship.description,
-    amount: ship.amount.toString(),
+    state: address.state,
+    country: address.country,
+    zip_code: address.zipCode,
   };
 }
 
@@ -119,33 +90,15 @@ function mapBasketToCart(basket: CustomerBasketResponse): Cart {
     id: basket.cart_id,
     items: basket.items.map(mapBasketItemToCartItem),
 
-    currencyCode: basket.currency_code,
     total: Number(basket.total),
     subTotal: Number(basket.sub_total),
     taxTotal: Number(basket.tax_total),
     totalQuantity: Number(basket.total_quantity),
 
-    email: basket.email,
     shippingAddress: mapProtoAddressToAddress(basket.shipping_address),
-    billingAddress: mapProtoAddressToAddress(basket.billing_address),
-    shippingMethods: mapProtoToShippingMethod(basket.shipping_methods),
-
     paymentCollection: basket.payment_collection,
 
     currentStep: basket.current_step,
-  };
-}
-
-function mapProtoToShippingMethod(ship?: ProtoShippingMethod): ShippingMethod | undefined {
-  if (!ship || !ship.id) {
-    return undefined;
-  }
-
-  return {
-    id: ship.id,
-    name: ship.name,
-    description: ship.description,
-    amount: Number(ship.amount),
   };
 }
 
@@ -171,22 +124,17 @@ function mapBasketItemToCartItem(item: BasketItem): CartItem {
 }
 
 function mapProtoAddressToAddress(protoAddress?: ProtoAddress): Address | undefined {
-  if (!protoAddress || !protoAddress.id) {
+  if (!protoAddress) {
     return undefined;
   }
 
   return {
-    id: protoAddress.id,
-    customerId: protoAddress.customer_id,
-    firstName: protoAddress.first_name,
-    lastName: protoAddress.last_name,
+    name: protoAddress.name,
     phone: protoAddress.phone,
-    company: protoAddress.company,
-    address1: protoAddress.address_1,
-    address2: protoAddress.address_2,
+    street: protoAddress.street,
     city: protoAddress.city,
-    countryCode: protoAddress.country_code,
-    province: protoAddress.province,
-    postalCode: protoAddress.postal_code,
+    state: protoAddress.state,
+    country: protoAddress.country,
+    zipCode: protoAddress.zip_code,
   };
 }

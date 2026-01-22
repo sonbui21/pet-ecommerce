@@ -1,4 +1,4 @@
-import { getCart, updateCart } from "@/lib/data/basket";
+import { getCart, updateCart } from "@/lib/actions/cart";
 import { getCartId, setCartId } from "@/lib/data/cookies";
 import { Cart, CartItem } from "@/lib/types/basket";
 import { ProductDetail, SelectedOptions } from "@/lib/types/catalog";
@@ -33,7 +33,6 @@ export const useCartStore = create<CartStore>((set, get) => {
         const newCart: Cart = {
           id: crypto.randomUUID(),
           items: [],
-          currencyCode: "USD",
           total: 0,
           subTotal: 0,
           taxTotal: 0,

@@ -6,7 +6,7 @@ import { Cart } from "@/lib/types/basket";
 import { placeOrder } from "@/lib/actions/order";
 import { StoreCustomer } from "@/lib/types/customer";
 import { useRouter } from "next/navigation";
-import { useCartStore } from "../basket/cart-store";
+import { useCartStore } from "../../lib/stores/cart-store";
 
 export const Review = ({ isOpen, cart, customer }: { cart: Cart; customer: StoreCustomer; isOpen: boolean }) => {
   const [isPending, startTransition] = useTransition();
@@ -66,7 +66,7 @@ export const Review = ({ isOpen, cart, customer }: { cart: Cart; customer: Store
           )}
           <div className='flex mt-8'>
             <button
-              onClick={handlePlaceOrder}
+              // onClick={handlePlaceOrder}
               className={`btn ${isPending ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
             >
               {isPending ? "Placing order..." : "Place order"}

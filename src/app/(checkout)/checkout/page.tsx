@@ -2,8 +2,7 @@ import { Addresses } from "@/components/order/addresses";
 import { CheckoutSummary } from "@/components/order/checkout-summary";
 import { Payment } from "@/components/order/payment";
 import { Review } from "@/components/order/review";
-import { Shipping } from "@/components/order/shipping";
-import { getCart } from "@/lib/data/basket";
+import { getCart } from "@/lib/actions/cart";
 import { retrieveCustomer } from "@/lib/data/customer";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
@@ -40,7 +39,7 @@ export default async function CheckoutPage(props: { searchParams: Promise<{ step
       <div className='row justify-between py-8'>
         <div className='col-lg-7'>
           <Addresses cart={cart} customer={customer} isOpen={step === "address"} />
-          <Shipping cart={cart} isOpen={step === "delivery"} />
+          {/* <Shipping cart={cart} isOpen={step === "delivery"} /> */}
           <Payment cart={cart} isOpen={step === "payment"} />
           <Review cart={cart} customer={customer} isOpen={step === "review"} />
         </div>
