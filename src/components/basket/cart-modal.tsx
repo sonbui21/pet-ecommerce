@@ -109,9 +109,11 @@ export function CartModal() {
               </ul>
 
               <div className='py-4 font-medium'>
-                <div className='flex items-center justify-between border-b border-neutral-300  text-(--theme-primary) py-1'>
+                <div className='flex items-center justify-between border-b border-neutral-300  text-(--theme-primary) py-1 text-[20px]'>
                   <p className='mb-0'>Subtotal (excl. taxes)</p>
-                  <Price amount={cart.subTotal} currencyCode={cart.currencyCode ?? "USD"} />
+                  <span className='font-bold'>
+                    <Price amount={cart.subTotal} currencyCode={cart.currencyCode ?? "USD"} />
+                  </span>
                 </div>
               </div>
 

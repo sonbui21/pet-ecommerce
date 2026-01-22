@@ -2,39 +2,38 @@
 
 import clsx from "clsx";
 import { useState, useTransition } from "react";
-import { CircleCheckSVG } from "../icon/circle-check";
 import { Cart } from "@/lib/types/basket";
 import { placeOrder } from "@/lib/actions/order";
 import { StoreCustomer } from "@/lib/types/customer";
+import { useRouter } from "next/navigation";
+import { useCartStore } from "../basket/cart-store";
 
 export const Review = ({ isOpen, cart, customer }: { cart: Cart; customer: StoreCustomer; isOpen: boolean }) => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const router = useRouter();
+  const fetchCart = useCartStore((state) => state.fetchCart);
 
   const handlePlaceOrder = async () => {
     setError(null);
     setMessage(null);
 
     startTransition(async () => {
-      try {
-        const result = await placeOrder(cart, customer.id, customer.email);
+      const result = await placeOrder(cart, customer.id, customer.email);
 
-        if (!result.success) {
-          setError(result.error || "Failed to place order");
-          return;
-        }
-
-        setMessage(
-          result.orderId
-            ? `Order placed successfully! Your order ID is ${result.orderId}`
-            : "Order placed successfully!",
-        );
-      } catch (err) {
-        console.error("Error adding item to cart:", err);
-        setError("Failed to add item to cart. Please try again.");
+      if (!result.success) {
+        setError(result.error || "Failed to place order");
+        return;
       }
+
+      // setMessage(
+      //   result.orderId ? `Order placed successfully! Your order ID is ${result.orderId}` : "Order placed successfully!",
+      // );
     });
+
+    await fetchCart();
+    router.push("/account");
   };
 
   return (
@@ -47,7 +46,6 @@ export const Review = ({ isOpen, cart, customer }: { cart: Cart; customer: Store
         >
           Review
         </h2>
-        {!isOpen && <CircleCheckSVG className='w-[20px] pb-2 text-(--theme-primary)' />}
       </div>
 
       {isOpen && (

@@ -20,14 +20,14 @@ export const QuantitySelector = ({
   return (
     <div className={`cart-plus-minus ${className ?? ""}`}>
       <div
-        className={`dec qtybutton ${classNameSpan ?? ""} ${isDecreaseDisabled ? "opacity-30 cursor-not-allowed!" : ""}`}
+        className={`dec qtybutton ${classNameSpan ?? ""} ${isDecreaseDisabled ? "opacity-50 cursor-not-allowed!" : ""}`}
         onClick={handleDecrease}
       >
         <span>-</span>
       </div>
       <input type='text' value={quantity} readOnly className={classNameInput} />
       <div
-        className={`inc qtybutton ${classNameSpan ?? ""} ${isIncreaseDisabled ? "opacity-30 cursor-not-allowed!" : ""}`}
+        className={`inc qtybutton ${classNameSpan ?? ""} ${isIncreaseDisabled ? "opacity-50 cursor-not-allowed!" : ""}`}
         onClick={handleIncrease}
       >
         <span>+</span>

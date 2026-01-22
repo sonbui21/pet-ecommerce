@@ -85,10 +85,12 @@ export const useCartStore = create<CartStore>((set, get) => {
       }
 
       const thumbnail = product.images[0]?.src ?? "";
-      const variantOptions = selectedVariant.options.map((opt) => ({
-        name: opt.name,
-        value: opt.value,
-      }));
+      const variantOptions = selectedVariant.options
+        .map((opt) => ({
+          name: opt.name,
+          value: opt.value,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
 
       const cartItem: CartItem = {
         id: existingItem?.id ?? crypto.randomUUID(),

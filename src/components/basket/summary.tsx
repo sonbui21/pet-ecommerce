@@ -25,8 +25,8 @@ export const Summary = ({ cart }: { cart: Cart }) => {
           </div>
         </div>
 
-        <div className='flex items-center justify-between border-b border-neutral-200 text-(--theme-primary) py-3 font-bold text-[18px]!'>
-          <p className='mb-0'>Total</p>
+        <div className='flex items-center justify-between border-b border-neutral-200 text-(--theme-primary) py-3 font-bold text-[20px]'>
+          <p className='mb-0 text-[20px]!'>Total</p>
           <Price amount={cart.total} currencyCode={currencyCode} />
         </div>
       </div>

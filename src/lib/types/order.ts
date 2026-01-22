@@ -23,6 +23,7 @@ export interface OrderItem {
   slug: string;
   thumbnail: string;
   price: number;
+  variantOptions: string;
 }
 
 export interface CreateOrderResponse {

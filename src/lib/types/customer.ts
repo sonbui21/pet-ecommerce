@@ -1,4 +1,4 @@
-import { Address, CartItem } from "./basket";
+import { Address } from "./basket";
 
 export interface StoreCustomer {
   id: string;
@@ -11,11 +11,20 @@ export interface StoreCustomer {
 }
 
 export interface StoreOrder {
-  shipping_address?: Address | null;
+  orderId: string;
+  date: string;
+  status: string;
+  total: number;
+  orderItems: OrderItem[];
+}
 
-  billing_address?: Address | null;
-
-  items: CartItem[] | null;
-
-  customer?: StoreCustomer;
+export interface OrderItem {
+  productId: string;
+  variantId: string;
+  quantity: number;
+  title: string;
+  slug: string;
+  thumbnail: string;
+  price: number;
+  variantOptions?: string;
 }

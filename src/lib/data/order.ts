@@ -3,6 +3,8 @@
 import { apiClient } from "../api/api-client";
 import { CreateOrderRequest, CreateOrderResponse } from "@/lib/types/order";
 import { API_ENDPOINTS } from "../api/endpoints";
+import { StoreOrder } from "../types/customer";
+import { ListResponse } from "../types/api";
 
 export async function createOrder(
   requestId: string,
@@ -29,4 +31,25 @@ export async function createOrder(
     orderId: result?.body.orderId,
     status: result?.body.status,
   };
+}
+
+export async function getOrders(): Promise<StoreOrder[]> {
+  // "use cache";
+  // cacheTag(TAGS.collections);
+  // cacheLife("days");
+
+  const response = await apiClient<ListResponse<StoreOrder>>({
+    endpoint: API_ENDPOINTS.ORDER.GET_ORDERS,
+  });
+
+  if (!response.success) {
+    console.error("Failed to fetch orders:", response.error);
+    return [];
+  }
+
+  if (!response.body?.data) {
+    return [];
+  }
+
+  return response.body.data;
 }

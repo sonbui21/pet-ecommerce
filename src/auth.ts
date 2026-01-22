@@ -28,13 +28,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       if (account?.id_token) token.idToken = account.id_token;
 
+      if (account?.providerAccountId) token.userId = account.providerAccountId;
+
       return token;
     },
 
     session: async ({ session, token }) => {
       session.accessToken = token.accessToken as string;
       session.idToken = token.idToken as string;
-      if (session.user) session.user.name = token.name as string;
+      if (session.user) {
+        session.user.name = token.name as string;
+      }
+
+      session.user.id = token.userId as string;
       return session;
     },
   },

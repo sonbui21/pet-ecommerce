@@ -48,6 +48,16 @@ export default function compareAddresses(address1: unknown, address2: unknown) {
   );
 }
 
+export function formatDateTime(iso: string) {
+  return new Date(iso).toLocaleString("en-US", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 export function formatCurrency(amount: number | string, currencyCode: string = "USD", locale?: string): string | null {
   const num = typeof amount === "string" ? parseFloat(amount) : amount;
 

@@ -15,7 +15,7 @@ export const Price = memo(function Price({
   return (
     <>
       {formattedPrice}
-      {hasDiscount && formattedOldPrice && <del className='text-[#b9bdc8] font-semibold ml-3'>{formattedOldPrice}</del>}
+      {hasDiscount && formattedOldPrice && <del className='text-[#b9bdc8] font-bold ml-3'>{formattedOldPrice}</del>}
     </>
   );
 });

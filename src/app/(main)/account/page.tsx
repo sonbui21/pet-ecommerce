@@ -1,5 +1,6 @@
 import { Overview } from "@/components/account/overview";
 import { retrieveCustomer } from "@/lib/data/customer";
+import { getOrders } from "@/lib/data/order";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 
 export default async function Dashboard() {
   const customer = await retrieveCustomer();
-  const orders = null;
+  const orders = await getOrders();
 
   return <Overview customer={customer} orders={orders} />;
 }
