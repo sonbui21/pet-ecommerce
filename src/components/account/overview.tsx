@@ -2,7 +2,7 @@ import { StoreCustomer, StoreOrder } from "@/lib/types/customer";
 import Image from "next/image";
 import { Price } from "../common/price";
 import { Divider } from "../common/divider";
-import { formatDateTime } from "@/lib/utils";
+import { formatDateTime, parseOptions } from "@/lib/utils";
 
 export const Overview = ({ customer, orders }: { customer: StoreCustomer | null; orders: StoreOrder[] | null }) => {
   return (
@@ -52,20 +52,16 @@ export const Overview = ({ customer, orders }: { customer: StoreCustomer | null;
                                 <div className='truncate font-medium'>{item.title}</div>
                                 {item.variantOptions && (
                                   <div className='mt-2 flex flex-wrap gap-1'>
-                                    {item.variantOptions
-                                      ?.split(";")
-                                      .filter(Boolean)
-                                      .map((pair) => {
-                                        const [name, value] = pair.split(":", 2);
-                                        return (
-                                          <span
-                                            key={name}
-                                            className='rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground'
-                                          >
-                                            {name}: {value}
-                                          </span>
-                                        );
-                                      })}
+                                    {parseOptions(item.variantOptions).map((o) => {
+                                      return (
+                                        <span
+                                          key={o.name}
+                                          className='rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground'
+                                        >
+                                          {o.name}: {o.value}
+                                        </span>
+                                      );
+                                    })}
                                   </div>
                                 )}
                               </div>

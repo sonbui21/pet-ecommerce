@@ -12,6 +12,7 @@ export const Review = ({ isOpen, cart, customer }: { cart: Cart; customer: Store
   const [isPending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const router = useRouter();
   const fetchCart = useCartStore((state) => state.fetchCart);
 
@@ -22,16 +23,19 @@ export const Review = ({ isOpen, cart, customer }: { cart: Cart; customer: Store
 
     const result = await placeOrder(cart, customer.id, customer.email);
 
+    setPending(false);
     if (!result.success) {
       setError("Failed to place order");
     } else {
-      // setMessage("Order placed successfully! Redirecting to your account page...");
+      setIsOrderPlaced(true);
+      setMessage("Order placed successfully! Redirecting to your account page...");
 
       await fetchCart();
-      router.push("/account");
-    }
 
-    setPending(false);
+      setTimeout(() => {
+        router.push("/account");
+      }, 1500);
+    }
   };
 
   return (
@@ -62,14 +66,16 @@ export const Review = ({ isOpen, cart, customer }: { cart: Cart; customer: Store
               <p className='text-sm text-green-800 mb-0'>{message}</p>
             </div>
           )}
-          <div className='flex mt-8'>
-            <button
-              onClick={handlePlaceOrder}
-              className={`btn ${isPending ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
-            >
-              {isPending ? "Placing order..." : "Place order"}
-            </button>
-          </div>
+          {!isOrderPlaced && (
+            <div className='flex mt-8'>
+              <button
+                onClick={handlePlaceOrder}
+                className={`btn ${isPending ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
+              >
+                {isPending ? "Placing order..." : "Place order"}
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>

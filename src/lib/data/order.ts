@@ -1,7 +1,7 @@
 "use server";
 
 import { apiClient } from "../api-client";
-import { CreateOrderRequest, CreateOrderResponse } from "@/lib/types/order";
+import { CreateOrderRequest } from "@/lib/types/order";
 import { API_ENDPOINTS } from "../endpoints";
 import { StoreOrder } from "../types/customer";
 import { ListResponse } from "../types/api";
@@ -9,8 +9,8 @@ import { ListResponse } from "../types/api";
 export async function createOrder(
   requestId: string,
   request: CreateOrderRequest,
-): Promise<{ success: boolean; error?: string } & CreateOrderResponse> {
-  const result = await apiClient<CreateOrderResponse>({
+): Promise<{ success: boolean; error?: string }> {
+  const result = await apiClient<void>({
     endpoint: API_ENDPOINTS.ORDER.PLACE_ORDER,
     method: "POST",
     headers: {
@@ -28,8 +28,6 @@ export async function createOrder(
 
   return {
     success: true,
-    orderId: result?.body.orderId,
-    status: result?.body.status,
   };
 }
 

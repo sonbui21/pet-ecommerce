@@ -1,5 +1,6 @@
 import "server-only";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export type ApiResult<T> =
   | { success: true; status: number; body: T }
@@ -48,7 +49,7 @@ export async function apiClient<T>({
   const response = await fetch(url.toString(), fetchOptions);
 
   if (response.status === 401) {
-    await signOut({ redirectTo: "/" });
+    redirect("/api/auth/signout");
   }
 
   // Handle 404 specifically
@@ -70,10 +71,27 @@ export async function apiClient<T>({
   }
 
   // Parse successful response
-  const data = await response.json();
-  return {
-    success: true,
-    status: response.status,
-    body: data,
-  };
+  const text = await response.text();
+
+  if (!text) {
+    return {
+      success: true,
+      status: response.status,
+      body: undefined as T,
+    };
+  }
+
+  try {
+    return {
+      success: true,
+      status: response.status,
+      body: JSON.parse(text) as T,
+    };
+  } catch {
+    return {
+      success: true,
+      status: response.status,
+      body: text as unknown as T,
+    };
+  }
 }

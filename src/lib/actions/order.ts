@@ -16,6 +16,8 @@ export async function placeOrder(cart: Cart, userId: string, userName: string): 
   const orderRequest: CreateOrderRequest = {
     userId,
     userName,
+    name: cart.shippingAddress?.name || "",
+    phone: cart.shippingAddress?.phone || "",
     street: cart.shippingAddress?.street || "",
     city: cart.shippingAddress?.city || "",
     state: cart.shippingAddress?.state || "",
@@ -56,7 +58,5 @@ export async function placeOrder(cart: Cart, userId: string, userName: string): 
 
   return {
     success: true,
-    orderId: result.orderId,
-    status: result.status,
   };
 }

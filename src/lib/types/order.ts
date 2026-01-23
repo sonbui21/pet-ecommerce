@@ -1,6 +1,8 @@
 export interface CreateOrderRequest {
   userId: string;
   userName: string;
+  name: string;
+  phone: string;
   city: string;
   street: string;
   state: string;
@@ -24,9 +26,4 @@ export interface OrderItem {
   thumbnail: string;
   price: number;
   variantOptions: string;
-}
-
-export interface CreateOrderResponse {
-  orderId?: string;
-  status?: string;
 }
