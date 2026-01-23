@@ -1,4 +1,4 @@
-import { Address } from "./basket";
+import { Address } from "./cart";
 
 export interface StoreCustomer {
   id: string;

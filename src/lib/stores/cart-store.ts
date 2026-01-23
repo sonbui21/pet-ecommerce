@@ -1,6 +1,6 @@
 import { getCart, updateCart } from "@/lib/actions/cart";
 import { getCartId, setCartId } from "@/lib/data/cookies";
-import { Cart, CartItem } from "@/lib/types/basket";
+import { Cart, CartItem } from "@/lib/types/cart";
 import { ProductDetail, SelectedOptions } from "@/lib/types/catalog";
 import { create } from "zustand";
 
@@ -33,9 +33,8 @@ export const useCartStore = create<CartStore>((set, get) => {
         const newCart: Cart = {
           id: crypto.randomUUID(),
           items: [],
-          total: 0,
-          subTotal: 0,
-          taxTotal: 0,
+
+          totalPrice: 0,
           totalQuantity: 0,
         };
 
@@ -46,7 +45,7 @@ export const useCartStore = create<CartStore>((set, get) => {
 
         const cartId = await getCartId();
 
-        if (cart.id !== cartId) {
+        if (cartId && cart.id !== cartId) {
           setCartId(cart.id);
         }
       }
@@ -71,11 +70,11 @@ export const useCartStore = create<CartStore>((set, get) => {
       const existingItem = cart.items.find((item) => item.variantId === selectedVariant.id);
 
       const existingQuantity = existingItem?.quantity ?? 0;
-      const requestedQuantity = selectedOptions.quantity;
-      const newQuantity = existingQuantity + requestedQuantity;
+      const newQuantity = existingQuantity + selectedOptions.quantity;
 
       if (newQuantity > selectedVariant.availableStock) {
         const available = selectedVariant.availableStock - existingQuantity;
+
         if (available <= 0) {
           return "This item is out of stock";
         } else {
@@ -92,34 +91,27 @@ export const useCartStore = create<CartStore>((set, get) => {
         .sort((a, b) => a.name.localeCompare(b.name));
 
       const cartItem: CartItem = {
-        id: existingItem?.id ?? crypto.randomUUID(),
         productId: product.id,
         variantId: selectedVariant.id,
         quantity: newQuantity,
         title: product.title,
         slug: product.slug,
         thumbnail: thumbnail,
-        variantOptions: variantOptions,
         price: selectedVariant.price,
         availableStock: selectedVariant.availableStock,
+        variantOptions: variantOptions,
       };
 
       const updatedItems = existingItem
         ? cart.items.map((item) => (item.variantId === selectedVariant.id ? cartItem : item))
         : [...cart.items, cartItem];
 
-      const subTotal = updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      const totalQuantity = updatedItems.reduce((sum, item) => sum + item.quantity, 0);
-      const taxTotal = cart.taxTotal ?? 0;
-      const total = subTotal + taxTotal;
-
       const updatedCart = {
         ...cart,
         items: updatedItems,
-        subTotal,
-        totalQuantity,
-        taxTotal,
-        total,
+
+        totalPrice: updatedItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
+        totalQuantity: updatedItems.reduce((sum, item) => sum + item.quantity, 0),
       };
 
       set({ cart: updatedCart });
@@ -146,7 +138,7 @@ export const useCartStore = create<CartStore>((set, get) => {
       if (!cart) return;
 
       const items = cart.items ?? [];
-      const updatedItems = items.map((item) => (item.id === itemId ? { ...item, quantity: quantity } : item));
+      const updatedItems = items.map((item) => (item.productId === itemId ? { ...item, quantity: quantity } : item));
 
       const nextCart: Cart = { ...cart, items: updatedItems };
 
@@ -159,7 +151,7 @@ export const useCartStore = create<CartStore>((set, get) => {
       if (!cart) return;
 
       const items = cart.items ?? [];
-      const removedItem = items.filter((item) => item.id !== itemId);
+      const removedItem = items.filter((item) => item.productId !== itemId);
 
       const nextCart: Cart = { ...cart, items: removedItem };
 

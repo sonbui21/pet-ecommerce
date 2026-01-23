@@ -1,10 +1,8 @@
-import { Cart } from "@/lib/types/basket";
+import { Cart } from "@/lib/types/cart";
 import Image from "next/image";
 import { Price } from "../common/price";
 
 export const CheckoutSummary = ({ cart }: { cart: Cart }) => {
-  const currencyCode = cart.currencyCode ?? "USD";
-
   return (
     <div>
       <h2>In your Cart</h2>
@@ -12,27 +10,27 @@ export const CheckoutSummary = ({ cart }: { cart: Cart }) => {
         <div className='py-3 border-y border-neutral-200'>
           <div className='flex items-center justify-between py-1'>
             <p className='mb-0'>Subtotal (excl. shipping and taxes)</p>
-            <Price amount={cart.subTotal} currencyCode={currencyCode} />
+            <Price amount={cart.totalPrice} />
           </div>
           <div className='flex items-center justify-between py-1'>
             <p className='mb-0'>Shipping</p>
-            <Price amount={cart.taxTotal} currencyCode={currencyCode} />
+            <Price amount={0} />
           </div>
           <div className='flex items-center justify-between py-1'>
             <p className='mb-0'>Taxes</p>
-            <Price amount={cart.taxTotal} currencyCode={currencyCode} />
+            <Price amount={0} />
           </div>
         </div>
 
         <div className='flex items-center justify-between border-b border-neutral-200 text-(--theme-primary) py-3 font-bold text-[20px]!'>
           <p className='mb-0'>Total</p>
-          <Price amount={cart.total} currencyCode={currencyCode} />
+          <Price amount={cart.totalPrice} />
         </div>
       </div>
       <div className='mt-3'>
         <ul className='list-wrap flex-grow overflow-auto flex flex-col gap-3'>
           {cart.items?.map((item) => (
-            <li key={item.id} className='flex w-full flex-col border-b border-neutral-300 pb-3'>
+            <li key={item.productId} className='flex w-full flex-col border-b border-neutral-300 pb-3'>
               <div className='flex justify-between'>
                 <div className='flex items-start gap-3 text-(--body-color)! hover:text-(--theme-primary)!'>
                   <div className='h-16 w-16 flex-shrink-0 overflow-hidden rounded-md bg-muted'>

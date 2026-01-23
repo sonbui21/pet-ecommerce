@@ -1,13 +1,13 @@
-import { baseUrl } from "@/lib/utils";
-
 export default function robots() {
+  const { PROJECT_PRODUCTION_URL } = process.env;
+
   return {
     rules: [
       {
         userAgent: "*",
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
-    host: baseUrl,
+    sitemap: `${PROJECT_PRODUCTION_URL}/sitemap.xml`,
+    host: PROJECT_PRODUCTION_URL,
   };
 }

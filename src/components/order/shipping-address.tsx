@@ -1,9 +1,9 @@
-import { Cart } from "@/lib/types/basket";
+import { Cart } from "@/lib/types/cart";
 import { Input } from "../common/input";
 
 export const ShippingAddress = ({ cart, email }: { cart: Cart; email?: string }) => {
   return (
-    <div className='sidebar-search-form shipping_address'>
+    <div className='sidebar-search-form shipping_address flex flex-col gap-4'>
       <div className='grid grid-cols-2 gap-4'>
         <Input
           label='Name'
@@ -52,7 +52,15 @@ export const ShippingAddress = ({ cart, email }: { cart: Cart; email?: string })
           defaultValue={cart.shippingAddress?.country}
           required
         />
-
+        <Input
+          label='Zip Code'
+          name='shipping_address.zip_code'
+          placeholder=' '
+          defaultValue={cart.shippingAddress?.zipCode}
+          required
+        />
+      </div>
+      <div className='grid grid-cols-2 gap-4'>
         <Input label='Email' name='email' type='email' placeholder='Email' defaultValue={email} required readOnly />
       </div>
     </div>

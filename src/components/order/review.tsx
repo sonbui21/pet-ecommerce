@@ -1,15 +1,15 @@
 "use client";
 
 import clsx from "clsx";
-import { useState, useTransition } from "react";
-import { Cart } from "@/lib/types/basket";
+import { useState } from "react";
+import { Cart } from "@/lib/types/cart";
 import { placeOrder } from "@/lib/actions/order";
 import { StoreCustomer } from "@/lib/types/customer";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "../../lib/stores/cart-store";
 
 export const Review = ({ isOpen, cart, customer }: { cart: Cart; customer: StoreCustomer; isOpen: boolean }) => {
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const router = useRouter();
@@ -18,22 +18,20 @@ export const Review = ({ isOpen, cart, customer }: { cart: Cart; customer: Store
   const handlePlaceOrder = async () => {
     setError(null);
     setMessage(null);
+    setPending(true);
 
-    startTransition(async () => {
-      const result = await placeOrder(cart, customer.id, customer.email);
+    const result = await placeOrder(cart, customer.id, customer.email);
 
-      if (!result.success) {
-        setError(result.error || "Failed to place order");
-        return;
-      }
+    if (!result.success) {
+      setError("Failed to place order");
+    } else {
+      // setMessage("Order placed successfully! Redirecting to your account page...");
 
-      // setMessage(
-      //   result.orderId ? `Order placed successfully! Your order ID is ${result.orderId}` : "Order placed successfully!",
-      // );
-    });
+      await fetchCart();
+      router.push("/account");
+    }
 
-    await fetchCart();
-    router.push("/account");
+    setPending(false);
   };
 
   return (
@@ -66,7 +64,7 @@ export const Review = ({ isOpen, cart, customer }: { cart: Cart; customer: Store
           )}
           <div className='flex mt-8'>
             <button
-              // onClick={handlePlaceOrder}
+              onClick={handlePlaceOrder}
               className={`btn ${isPending ? "opacity-50 cursor-not-allowed pointer-events-none" : ""}`}
             >
               {isPending ? "Placing order..." : "Place order"}

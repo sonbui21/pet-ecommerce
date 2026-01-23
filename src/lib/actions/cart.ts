@@ -1,10 +1,10 @@
 "use server";
 
 import { getBasket, updateBasket } from "../grpc/basket-client";
-import { BasketItem, UpdateBasketRequest } from "../grpc/basket.proto";
-import { Address, Cart, CartItem } from "../types/basket";
-import { CustomerBasketResponse, Address as ProtoAddress } from "../grpc/basket.proto";
+import { Address, Cart, CartItem } from "../types/cart";
+import { BasketItem, CustomerBasket, Address as ProtoAddress } from "../grpc/basket.proto";
 import { getCartId } from "../data/cookies";
+import { joinOptions, parseOptions } from "../utils";
 
 export async function updateCart(cart: Cart): Promise<Cart | null> {
   const updatedBasket = await updateBasket(mapCartToBasket(cart));
@@ -20,51 +20,30 @@ export async function getCart(): Promise<Cart | undefined> {
     return undefined;
   }
 
-  const cart = await getBasket({ cart_id: cartId });
+  const cart = await getBasket({ basket_id: cartId });
   return mapBasketToCart(cart);
 }
 
-function mapCartToBasket(cart: Cart): UpdateBasketRequest {
-  const subTotal = cart.items?.reduce((sum, item) => sum + item.price * item.quantity, 0) ?? 0;
-
-  const totalQuantity = cart.items?.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
-
-  const taxTotal = 0;
-  const total = subTotal + taxTotal;
-
+function mapCartToBasket(cart: Cart): CustomerBasket {
   return {
-    cart_id: cart.id,
+    basket_id: cart.id,
     items: cart.items ? cart.items?.map(mapCartItemToBasketItem) : [],
-
-    total: total.toString(),
-    sub_total: subTotal.toString(),
-    tax_total: taxTotal.toString(),
-    total_quantity: totalQuantity.toString(),
 
     shipping_address: mapAddressToProtoAddress(cart.shippingAddress),
     payment_collection: cart.paymentCollection,
-
-    current_step: cart.currentStep ?? "",
   };
 }
 
 function mapCartItemToBasketItem(item: CartItem): BasketItem {
   return {
-    id: item.id,
     product_id: item.productId,
     variant_id: item.variantId,
     quantity: item.quantity,
-
     title: item.title,
     slug: item.slug,
     thumbnail: item.thumbnail,
-
-    variant_options: item.variantOptions.map((opt) => ({
-      name: opt.name,
-      value: opt.value,
-    })),
-
     price: item.price.toString(),
+    variant_options: joinOptions(item.variantOptions),
     available_stock: item.availableStock,
   };
 }
@@ -85,26 +64,22 @@ function mapAddressToProtoAddress(address?: Address): ProtoAddress | undefined {
   };
 }
 
-function mapBasketToCart(basket: CustomerBasketResponse): Cart {
+function mapBasketToCart(basket: CustomerBasket): Cart {
+  const totalPrice = basket.items.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
+  const totalQuantity = basket.items.reduce((sum, item) => sum + item.quantity, 0);
   return {
-    id: basket.cart_id,
+    id: basket.basket_id,
     items: basket.items.map(mapBasketItemToCartItem),
-
-    total: Number(basket.total),
-    subTotal: Number(basket.sub_total),
-    taxTotal: Number(basket.tax_total),
-    totalQuantity: Number(basket.total_quantity),
-
     shippingAddress: mapProtoAddressToAddress(basket.shipping_address),
     paymentCollection: basket.payment_collection,
 
-    currentStep: basket.current_step,
+    totalPrice: totalPrice,
+    totalQuantity: totalQuantity,
   };
 }
 
 function mapBasketItemToCartItem(item: BasketItem): CartItem {
   return {
-    id: item.id,
     productId: item.product_id,
     variantId: item.variant_id,
     quantity: item.quantity,
@@ -113,13 +88,9 @@ function mapBasketItemToCartItem(item: BasketItem): CartItem {
     slug: item.slug,
     thumbnail: item.thumbnail,
 
-    variantOptions: item.variant_options.map((opt) => ({
-      name: opt.name,
-      value: opt.value,
-    })),
-
     price: Number(item.price),
     availableStock: item.available_stock,
+    variantOptions: parseOptions(item.variant_options),
   };
 }
 

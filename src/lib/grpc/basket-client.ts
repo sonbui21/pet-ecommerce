@@ -3,7 +3,7 @@ import "server-only";
 import * as grpc from "@grpc/grpc-js";
 import * as protoLoader from "@grpc/proto-loader";
 import path from "path";
-import { GetBasketRequest, CustomerBasketResponse, UpdateBasketRequest } from "./basket.proto";
+import { GetBasketRequest, CustomerBasket } from "./basket.proto";
 import { auth } from "@/auth";
 
 interface BasketProtoPackage {
@@ -16,12 +16,12 @@ interface BasketClient extends grpc.Client {
   GetBasket: (
     request: GetBasketRequest,
     metadata: grpc.Metadata,
-    callback: (error: grpc.ServiceError | null, response: CustomerBasketResponse) => void
+    callback: (error: grpc.ServiceError | null, response: CustomerBasket) => void,
   ) => void;
   UpdateBasket: (
-    request: UpdateBasketRequest,
+    request: CustomerBasket,
     metadata: grpc.Metadata,
-    callback: (error: grpc.ServiceError | null, response: CustomerBasketResponse) => void
+    callback: (error: grpc.ServiceError | null, response: CustomerBasket) => void,
   ) => void;
 }
 
@@ -49,7 +49,7 @@ function getBasketClient(): BasketClient {
       process.env.BASKET_GRPC_BASE_URL
         ? process.env.BASKET_GRPC_BASE_URL.replace(/^https?:\/\//, "").replace(/^\/+/, "")
         : "localhost:5021",
-      credentials
+      credentials,
     ) as unknown as BasketClient;
   }
   return basketClient;
@@ -64,7 +64,7 @@ function createMetadata(session: { accessToken?: string } | null): grpc.Metadata
 
   return metadata;
 }
-export async function getBasket(request: GetBasketRequest): Promise<CustomerBasketResponse> {
+export async function getBasket(request: GetBasketRequest): Promise<CustomerBasket> {
   const basketClient = getBasketClient();
   const session = await auth();
   const metadata = createMetadata(session);
@@ -77,23 +77,19 @@ export async function getBasket(request: GetBasketRequest): Promise<CustomerBask
   });
 }
 
-export async function updateBasket(request: UpdateBasketRequest): Promise<CustomerBasketResponse> {
+export async function updateBasket(request: CustomerBasket): Promise<CustomerBasket> {
   return new Promise(async (resolve, reject) => {
     const basketClient = getBasketClient();
 
     const session = await auth();
     const metadata = createMetadata(session);
 
-    basketClient.UpdateBasket(
-      request,
-      metadata,
-      (error: grpc.ServiceError | null, response: CustomerBasketResponse) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(response);
-        }
+    basketClient.UpdateBasket(request, metadata, (error: grpc.ServiceError | null, response: CustomerBasket) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(response);
       }
-    );
+    });
   });
 }

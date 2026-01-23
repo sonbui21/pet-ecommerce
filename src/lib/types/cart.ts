@@ -1,20 +1,14 @@
 export type Cart = {
   id: string;
   items: CartItem[];
-
-  total: number;
-  subTotal: number;
-  taxTotal: number;
-  totalQuantity: number;
-
   shippingAddress?: Address;
   paymentCollection?: string;
 
-  currentStep?: string;
+  totalPrice: number;
+  totalQuantity: number;
 };
 
 export type CartItem = {
-  id: string;
   productId: string;
   variantId: string;
   quantity: number;
@@ -23,14 +17,9 @@ export type CartItem = {
   slug: string;
   thumbnail: string;
 
-  variantOptions: Option[];
   price: number;
   availableStock: number;
-};
-
-export type Option = {
-  name: string;
-  value: string;
+  variantOptions: Option[];
 };
 
 export interface Address {
@@ -42,3 +31,8 @@ export interface Address {
   country: string;
   zipCode: string;
 }
+
+export type Option = {
+  name: string;
+  value: string;
+};

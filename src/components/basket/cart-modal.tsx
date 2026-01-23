@@ -35,7 +35,7 @@ export function CartModal() {
     >
       <SheetTrigger className='!text-[var(--theme-secondary)] hover:!text-[var(--theme-primary)]'>
         <i className='flaticon-shopping-bag'></i>
-        {cart?.totalQuantity !== undefined && <span className='custom-cart-span'>{cart?.totalQuantity ?? 0}</span>}
+        <span className='custom-cart-span'>{cart?.totalQuantity ?? 0}</span>
       </SheetTrigger>
 
       <SheetContent side='right' className='w-full sm:max-w-md gap-0 bg-[#fff]'>
@@ -51,7 +51,7 @@ export function CartModal() {
             <>
               <ul className='list-wrap flex-grow overflow-auto'>
                 {cart.items.map((item) => (
-                  <li key={item.id} className='flex w-full flex-col border-b border-neutral-300 pr-2 pt-2 pb-2'>
+                  <li key={item.productId} className='flex w-full flex-col border-b border-neutral-300 pr-2 pt-2 pb-2'>
                     <div className='flex justify-between mb-2'>
                       <Link
                         href={`/products/${item.slug}`}
@@ -86,7 +86,10 @@ export function CartModal() {
                           </div>
                         </div>
                       </Link>
-                      <span className='cursor-pointer hover:text-(--theme-primary)' onClick={() => removeItem(item.id)}>
+                      <span
+                        className='cursor-pointer hover:text-(--theme-primary)'
+                        onClick={() => removeItem(item.productId)}
+                      >
                         Delete
                       </span>
                     </div>
@@ -96,13 +99,13 @@ export function CartModal() {
                         isDecreaseDisabled={item.quantity <= 1}
                         isIncreaseDisabled={item.quantity >= item.availableStock}
                         quantity={item.quantity}
-                        handleDecrease={() => updateItemQuantity(item.id, item.quantity - 1)}
-                        handleIncrease={() => updateItemQuantity(item.id, item.quantity + 1)}
+                        handleDecrease={() => updateItemQuantity(item.productId, item.quantity - 1)}
+                        handleIncrease={() => updateItemQuantity(item.productId, item.quantity + 1)}
                         className='w-[128px]!'
                         classNameInput='h-[36px]! text-sm!'
                         classNameSpan='w-[24px]! h-[24px]!'
                       />
-                      <Price amount={item.price} currencyCode={cart.currencyCode ?? "USD"} />
+                      <Price amount={item.price} />
                     </div>
                   </li>
                 ))}
@@ -112,7 +115,7 @@ export function CartModal() {
                 <div className='flex items-center justify-between border-b border-neutral-300  text-(--theme-primary) py-1 text-[20px]'>
                   <p className='mb-0'>Subtotal (excl. taxes)</p>
                   <span className='font-bold'>
-                    <Price amount={cart.subTotal} currencyCode={cart.currencyCode ?? "USD"} />
+                    <Price amount={cart?.totalPrice ?? 0} />
                   </span>
                 </div>
               </div>

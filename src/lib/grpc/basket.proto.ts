@@ -1,24 +1,18 @@
 export interface GetBasketRequest {
-  cart_id: string;
-}
-
-export interface VariantOption {
-  name: string;
-  value: string;
+  basket_id: string;
 }
 
 export interface Address {
   name: string;
+  phone: string;
   street: string;
   city: string;
   state: string;
   country: string;
   zip_code: string;
-  phone: string;
 }
 
 export interface BasketItem {
-  id: string;
   product_id: string;
   variant_id: string;
   quantity: number;
@@ -27,37 +21,14 @@ export interface BasketItem {
   slug: string;
   thumbnail: string;
 
-  variant_options: VariantOption[];
   price: string;
   available_stock: number;
+  variant_options: string;
 }
 
-export interface CustomerBasketResponse {
-  cart_id: string;
+export interface CustomerBasket {
+  basket_id: string;
   items: BasketItem[];
-
-  total: string;
-  sub_total: string;
-  tax_total: string;
-  total_quantity: string;
-
   shipping_address?: Address;
-  billing_address?: Address;
   payment_collection?: string;
-  current_step: string;
-}
-
-export interface UpdateBasketRequest {
-  cart_id: string;
-  items: BasketItem[];
-
-  total: string;
-  sub_total: string;
-  tax_total: string;
-  total_quantity: string;
-
-  shipping_address?: Address;
-  billing_address?: Address;
-  payment_collection?: string;
-  current_step: string;
 }

@@ -1,6 +1,6 @@
 "use server";
 
-import { Cart } from "@/lib/types/basket";
+import { Cart } from "@/lib/types/cart";
 import { CreateOrderRequest } from "@/lib/types/order";
 import { createOrder } from "@/lib/data/order";
 import { getRequestOrderId, setRequestOrderId } from "../data/cookies";
@@ -16,11 +16,11 @@ export async function placeOrder(cart: Cart, userId: string, userName: string): 
   const orderRequest: CreateOrderRequest = {
     userId,
     userName,
+    street: cart.shippingAddress?.street || "",
     city: cart.shippingAddress?.city || "",
-    street: cart.shippingAddress?.address1 || "",
-    state: cart.shippingAddress?.province || "",
-    country: cart.shippingAddress?.countryCode || "",
-    zipCode: cart.shippingAddress?.postalCode || "",
+    state: cart.shippingAddress?.state || "",
+    country: cart.shippingAddress?.country || "",
+    zipCode: cart.shippingAddress?.zipCode || "",
     cardNumber: "0000000000000000",
     cardHolderName: userName,
     cardExpiration: "2030-01-01T00:00:00Z",
@@ -50,7 +50,7 @@ export async function placeOrder(cart: Cart, userId: string, userName: string): 
   if (!result.success) {
     return {
       success: false,
-      error: result.error || "Failed to create order",
+      error: result.error || "Failed to place order.",
     };
   }
 

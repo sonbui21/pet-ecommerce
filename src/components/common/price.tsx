@@ -7,7 +7,7 @@ export const Price = memo(function Price({
   oldAmount,
 }: {
   amount: number;
-  currencyCode: string;
+  currencyCode?: string;
   oldAmount?: number;
 } & React.ComponentProps<"p">) {
   const { formattedPrice, formattedOldPrice, hasDiscount } = formatPriceWithDiscount(amount, oldAmount, currencyCode);

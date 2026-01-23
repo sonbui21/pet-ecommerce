@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { ShippingAddress } from "./shipping-address";
 import { FormEvent } from "react";
-import { Address, Cart } from "@/lib/types/basket";
+import { Address, Cart } from "@/lib/types/cart";
 import { StoreCustomer } from "@/lib/types/customer";
 import { CircleCheckSVG } from "../icon/circle-check";
 import { Divider } from "../common/divider";
@@ -14,34 +14,30 @@ export const Addresses = ({ cart, customer, isOpen }: { cart: Cart; customer: St
   const pathname = usePathname();
 
   const handleEdit = async () => {
-    await updateCart({ ...cart, currentStep: "address" });
-    router.push(pathname + "?step=address");
+    router.push(pathname + "?step=address", { scroll: false });
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-
     const shippingAddress: Address = {
       name: (formData.get("shipping_address.name") as string) || "",
+      phone: (formData.get("shipping_address.phone") as string) || "",
       street: (formData.get("shipping_address.street") as string) || "",
       city: (formData.get("shipping_address.city") as string) || "",
       state: (formData.get("shipping_address.state") as string) || "",
       country: (formData.get("shipping_address.country") as string) || "",
       zipCode: (formData.get("shipping_address.zip_code") as string) || "",
-      phone: (formData.get("shipping_address.phone") as string) || "",
     };
 
     const updatedCart: Cart = {
       ...cart,
       shippingAddress,
-      currentStep: "delivery",
     };
-
     await updateCart(updatedCart);
 
-    router.push(pathname + "?step=delivery");
+    router.push(pathname + "?step=payment", { scroll: false });
   };
 
   return (

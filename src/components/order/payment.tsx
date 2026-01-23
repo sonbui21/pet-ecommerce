@@ -1,6 +1,6 @@
 "use client";
 
-import { Cart } from "@/lib/types/basket";
+import { Cart } from "@/lib/types/cart";
 import clsx from "clsx";
 import { usePathname, useRouter } from "next/navigation";
 import { CircleCheckSVG } from "../icon/circle-check";
@@ -14,7 +14,6 @@ export const Payment = ({ cart, isOpen }: { cart: Cart; isOpen: boolean }) => {
   const pathname = usePathname();
 
   const handleEdit = async () => {
-    await updateCart({ ...cart, currentStep: "payment" });
     router.push(pathname + "?step=payment", { scroll: false });
   };
 
@@ -25,19 +24,11 @@ export const Payment = ({ cart, isOpen }: { cart: Cart; isOpen: boolean }) => {
 
     const updatedCart: Cart = {
       ...cart,
-      paymentCollection: "manual_payment",
-      currentStep: "review",
+      paymentCollection: "Visa / MasterCard",
     };
+    await updateCart(updatedCart);
 
-    try {
-      const savedCart = await updateCart(updatedCart);
-
-      if (savedCart) {
-        router.push(pathname + "?step=review", { scroll: false });
-      }
-    } catch (error) {
-      console.error("Failed to update cart:", error);
-    }
+    router.push(pathname + "?step=review", { scroll: false });
   };
 
   return (
@@ -67,7 +58,7 @@ export const Payment = ({ cart, isOpen }: { cart: Cart; isOpen: boolean }) => {
             <button className='flex items-center justify-between cursor-pointer py-3 px-8 border rounded-lg! border-(--theme-primary)! mt-4'>
               <div className='flex items-center gap-x-4'>
                 <input type='radio' className='accent-(--theme-primary)!' defaultChecked />
-                <span>Manual Payment</span>
+                <span>Visa / MasterCard</span>
               </div>
               <span>
                 <CreditCardSVG className='w-[20px]' />
@@ -85,7 +76,7 @@ export const Payment = ({ cart, isOpen }: { cart: Cart; isOpen: boolean }) => {
               <div className='flex items-start gap-x-1 w-full'>
                 <div className='flex flex-col w-1/3'>
                   <p className='font-bold! mb-2'>Payment method</p>
-                  <p className='m-0'>Manual Payment</p>
+                  <p className='m-0'>{cart.paymentCollection}</p>
                 </div>
 
                 <div className='flex flex-col w-1/3 '>

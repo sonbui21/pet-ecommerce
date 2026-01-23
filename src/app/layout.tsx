@@ -1,5 +1,4 @@
 import { Baloo_Bhaina_2, Plus_Jakarta_Sans } from "next/font/google";
-import { baseUrl } from "@/lib/utils";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@/styles/globals.css";
@@ -9,10 +8,10 @@ import "@/styles/animate.min.css";
 import "@/styles/animation.css";
 import "@/styles/main.css";
 
-const { SITE_NAME } = process.env;
+const { SITE_NAME, PROJECT_PRODUCTION_URL } = process.env;
 
 export const metadata = {
-  metadataBase: new URL(baseUrl),
+  metadataBase: new URL(PROJECT_PRODUCTION_URL!),
   title: {
     default: SITE_NAME!,
     template: `%s | ${SITE_NAME}`,

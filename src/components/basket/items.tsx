@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { CartItem } from "@/lib/types/basket";
+import { CartItem } from "@/lib/types/cart";
 import { QuantitySelector } from "./quantity-selector";
 import { Price } from "../common/price";
 
@@ -18,7 +18,7 @@ export const Items = function Items({
       <h1>Cart</h1>
       <ul className='list-wrap flex-grow overflow-auto flex flex-col gap-3'>
         {items.map((item) => (
-          <li key={item.id} className='flex w-full flex-col border-b border-neutral-300 pb-3'>
+          <li key={item.productId} className='flex w-full flex-col border-b border-neutral-300 pb-3'>
             <div className='flex justify-between mb-2'>
               <Link
                 href={`/products/${item.slug}`}
@@ -49,7 +49,7 @@ export const Items = function Items({
                   </div>
                 </div>
               </Link>
-              <span className='cursor-pointer hover:text-(--theme-primary)' onClick={() => removeItem(item.id)}>
+              <span className='cursor-pointer hover:text-(--theme-primary)' onClick={() => removeItem(item.productId)}>
                 Delete
               </span>
             </div>
@@ -59,8 +59,8 @@ export const Items = function Items({
                 isDecreaseDisabled={item.quantity <= 1}
                 isIncreaseDisabled={item.quantity >= item.availableStock}
                 quantity={item.quantity}
-                handleDecrease={() => updateItemQuantity(item.id, item.quantity - 1)}
-                handleIncrease={() => updateItemQuantity(item.id, item.quantity + 1)}
+                handleDecrease={() => updateItemQuantity(item.productId, item.quantity - 1)}
+                handleIncrease={() => updateItemQuantity(item.productId, item.quantity + 1)}
                 className='w-[128px]!'
                 classNameInput='h-[36px]! text-sm!'
                 classNameSpan='w-[24px]! h-[24px]!'

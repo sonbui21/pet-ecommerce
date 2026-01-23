@@ -1,10 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-export const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : "http://localhost:3000";
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -46,7 +42,6 @@ export function formatCurrency(amount: number | string, currencyCode: string = "
     }).format(num);
   } catch (error) {
     console.error(`Error formatting currency (${currencyCode}):`, error);
-    // Fallback to simple format
     return `${currencyCode === "USD" ? "$" : currencyCode} ${num.toFixed(2)}`;
   }
 }
@@ -73,4 +68,26 @@ export function formatPriceWithDiscount(
     formattedOldPrice,
     hasDiscount: !!hasDiscount,
   };
+}
+
+type Option = {
+  name: string;
+  value: string;
+};
+
+export function joinOptions(options: Option[]): string {
+  return options.map((opt) => `${opt.name}:${opt.value}`).join(";");
+}
+
+export function parseOptions(str: string): Option[] {
+  if (!str) return [];
+
+  return str
+    .split(";")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((pair) => {
+      const [name, value] = pair.split(":").map((v) => v.trim());
+      return { name, value };
+    });
 }
