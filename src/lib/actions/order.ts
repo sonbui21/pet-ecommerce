@@ -58,5 +58,6 @@ export async function placeOrder(cart: Cart, userId: string, userName: string): 
 
   return {
     success: true,
+    orderId: result.orderId,
   };
 }

@@ -31,8 +31,8 @@ export default async function CheckoutPage(props: { searchParams: Promise<{ step
       <div className='row justify-between py-8'>
         <div className='col-lg-7'>
           <Addresses cart={cart} customer={customer} isOpen={step === "address"} />
-          <Payment cart={cart} isOpen={step === "payment"} />
           <Review cart={cart} customer={customer} isOpen={step === "review"} />
+          <Payment cart={cart} customer={customer} isOpen={step === "payment"} />
         </div>
 
         <div className='col-lg-4'>

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Cart } from "@/lib/types/cart";
 import { placeOrder } from "@/lib/actions/order";
 import { StoreCustomer } from "@/lib/types/customer";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCartStore } from "../../lib/stores/cart-store";
 
 export const Review = ({ isOpen, cart, customer }: { cart: Cart; customer: StoreCustomer; isOpen: boolean }) => {
@@ -14,44 +14,45 @@ export const Review = ({ isOpen, cart, customer }: { cart: Cart; customer: Store
   const [message, setMessage] = useState<string | null>(null);
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
   const fetchCart = useCartStore((state) => state.fetchCart);
+  const setOrderId = useCartStore((state) => state.setOrderId);
 
   const handlePlaceOrder = async () => {
     setError(null);
     setMessage(null);
     setPending(true);
 
-    const result = await placeOrder(cart, customer.id, customer.email);
+    // const result = await placeOrder(cart, customer.id, customer.email);
 
     setPending(false);
-    if (!result.success) {
+
+    const result = { success: true, orderId: "019c0cba-6ebc-7f3f-b680-204510d0ab9b" };
+    if (!result.success || !result.orderId) {
       setError("Failed to place order");
     } else {
-      setIsOrderPlaced(true);
-      setMessage("Order placed successfully! Redirecting to your account page...");
+      setOrderId(result.orderId);
+      // setIsOrderPlaced(true);
+      // setMessage("Order placed successfully! Redirecting to your account page...");
 
+      router.push(pathname + "?step=payment", { scroll: false });
       await fetchCart();
-
-      setTimeout(() => {
-        router.push("/account");
-      }, 1500);
     }
   };
 
   return (
     <div>
-      <div className='flex gap-2'>
-        <h2
-          className={clsx("mb-0", {
-            "opacity-50 pointer-events-none select-none": !isOpen,
-          })}
-        >
-          Review
-        </h2>
-      </div>
-
       {isOpen && (
         <>
+          <div className='flex gap-2'>
+            <h2
+              className={clsx("mb-0", {
+                "opacity-50 pointer-events-none select-none": !isOpen,
+              })}
+            >
+              Review
+            </h2>
+          </div>
           <div>
             By clicking the Place Order button, you confirm that you have read, understand and accept our Terms of Use,
             Terms of Sale and Returns Policy and acknowledge that you have read PetPal Store&apos;s Privacy Policy.

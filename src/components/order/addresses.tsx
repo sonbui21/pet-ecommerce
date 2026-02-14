@@ -37,7 +37,7 @@ export const Addresses = ({ cart, customer, isOpen }: { cart: Cart; customer: St
     };
     await updateCart(updatedCart);
 
-    router.push(pathname + "?step=payment", { scroll: false });
+    router.push(pathname + "?step=review", { scroll: false });
   };
 
   return (
@@ -61,7 +61,7 @@ export const Addresses = ({ cart, customer, isOpen }: { cart: Cart; customer: St
 
           <div className='flex mt-8'>
             <button type='submit' className='btn'>
-              Continue to delivery
+              Continue
             </button>
           </div>
         </form>

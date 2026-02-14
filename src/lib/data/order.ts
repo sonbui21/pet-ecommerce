@@ -9,8 +9,8 @@ import { ListResponse } from "../types/api";
 export async function createOrder(
   requestId: string,
   request: CreateOrderRequest,
-): Promise<{ success: boolean; error?: string }> {
-  const result = await apiClient<void>({
+): Promise<{ success: boolean; error?: string; orderId?: string; status?: string }> {
+  const result = await apiClient<string>({
     endpoint: API_ENDPOINTS.ORDER.PLACE_ORDER,
     method: "POST",
     headers: {
@@ -28,6 +28,7 @@ export async function createOrder(
 
   return {
     success: true,
+    orderId: result.body,
   };
 }
 

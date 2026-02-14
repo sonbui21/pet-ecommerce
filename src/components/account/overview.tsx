@@ -6,7 +6,7 @@ import { formatDateTime, parseOptions } from "@/lib/utils";
 
 export const Overview = ({ customer, orders }: { customer: StoreCustomer | null; orders: StoreOrder[] | null }) => {
   return (
-    <div>
+    <div className='min-h-[1200px]'>
       <div className='flex justify-between items-center'>
         <h3>Hello {customer?.first_name}</h3>
         <span>

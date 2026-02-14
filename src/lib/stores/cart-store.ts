@@ -7,9 +7,11 @@ import { create } from "zustand";
 interface CartStore {
   cart: Cart | null;
   isOpen: boolean;
+  orderId: string;
   openCart: () => void;
   closeCart: () => void;
   setCart: (cart: Cart | null) => void;
+  setOrderId: (orderId: string) => void;
   fetchCart: () => Promise<void>;
   addItemToCart: (product: ProductDetail, selectedOptions: SelectedOptions) => Promise<string | null>;
   updateItemQuantity: (itemId: string, quantity: number) => Promise<void>;
@@ -20,11 +22,13 @@ export const useCartStore = create<CartStore>((set, get) => {
   return {
     cart: null,
     isOpen: false,
+    orderId: "",
 
     openCart: () => set({ isOpen: true }),
     closeCart: () => set({ isOpen: false }),
 
     setCart: (cart) => set({ cart }),
+    setOrderId: (orderId) => set({ orderId }),
 
     fetchCart: async () => {
       const cart = await getCart();

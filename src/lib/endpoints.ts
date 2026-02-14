@@ -14,4 +14,7 @@ export const API_ENDPOINTS = {
     GET_ORDERS: `${process.env.ORDER_API_BASE_URL}/api/orders`,
     PLACE_ORDER: `${process.env.ORDER_API_BASE_URL}/api/orders`,
   },
+  PAYMENT: {
+    INTENTS: `${process.env.PAYMENT_API_BASE_URL}/api/payment/intents`,
+  },
 } as const;
